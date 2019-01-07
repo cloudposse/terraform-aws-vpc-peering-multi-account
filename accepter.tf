@@ -69,7 +69,7 @@ data "aws_subnet_ids" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids = "${distinct(sort(data.aws_subnet_ids.accepter.ids))}"
+  accepter_subnet_ids       = "${distinct(sort(data.aws_subnet_ids.accepter.ids))}"
   accepter_subnet_ids_count = "${length(local.accepter_subnet_ids)}"
 }
 
