@@ -5,7 +5,7 @@
 #
 
 # Name of this project
-name: terraform-aws-vpc-peering-cross-account
+name: terraform-aws-vpc-peering-multi-account
 
 # Tags of this project
 tags:
@@ -31,16 +31,16 @@ categories:
 license: "APACHE2"
 
 # Canonical GitHub repo
-github_repo: cloudposse/terraform-aws-vpc-peering-cross-account
+github_repo: cloudposse/terraform-aws-vpc-peering-multi-account
 
 # Badges to display
 badges:
   - name: "Build Status"
-    image: "https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-cross-account.svg?branch=master"
-    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-cross-account"
+    image: "https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account.svg?branch=master"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account"
   - name: "Latest Release"
-    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-cross-account.svg"
-    url: "https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account/releases/latest"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg"
+    url: "https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest"
   - name: "Slack Community"
     image: "https://slack.cloudposse.com/badge.svg"
     url: "https://slack.cloudposse.com"
@@ -62,13 +62,13 @@ description: |-
   Terraform module to create a peering connection between any two VPCs existing in different AWS accounts. 
   This module supports performing this action from a 3rd account (e.g. a "root" account) by specifying the roles to assume for each member account.
   
-  **IMPORTANT:** AWS allows a cross-account VPC Peering Connection to be deleted from either the requester's or accepter's side. However, Terraform only allows the VPC Peering Connection to be deleted from the requester's side by removing the corresponding `aws_vpc_peering_connection` resource from your configuration. [Read more about this](https://www.terraform.io/docs/providers/aws/r/vpc_peering_accepter.html) on Terraform's documentation portal.
+  **IMPORTANT:** AWS allows a multi-account VPC Peering Connection to be deleted from either the requester's or accepter's side. However, Terraform only allows the VPC Peering Connection to be deleted from the requester's side by removing the corresponding `aws_vpc_peering_connection` resource from your configuration. [Read more about this](https://www.terraform.io/docs/providers/aws/r/vpc_peering_accepter.html) on Terraform's documentation portal.
 
 # How to use this project
 usage: |-
   ```hcl
   module "vpc_peering" {
-    source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account.git?ref=master"
+    source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account.git?ref=master"
     namespace        = "eg"
     stage            = "dev"
     name             = "cluster"

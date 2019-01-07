@@ -11,7 +11,7 @@
 | delimiter | Delimiter to be used between `namespace`, `stage`, `name`, and `attributes` | string | `-` | no |
 | enabled | Set to false to prevent the module from creating or accessing any resources | string | `true` | no |
 | name | Name  (e.g. `app` or `cluster`) | string | - | yes |
-| namespace | Namespace (e.g. `cp` or `cloudposse`) | string | - | yes |
+| namespace | Namespace (e.g. `eg` or `cp`) | string | - | yes |
 | requester_aws_assume_role_arn | Requester AWS Assume Role ARN | string | - | yes |
 | requester_region | Requester AWS region | string | - | yes |
 | requester_vpc_id | Requestor VPC ID filter | string | `` | no |

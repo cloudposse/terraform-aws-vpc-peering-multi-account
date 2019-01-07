@@ -3,15 +3,15 @@
 
 [![Cloud Posse][logo]](https://cpco.io/homepage)
 
-# terraform-aws-vpc-peering-cross-account
+# terraform-aws-vpc-peering-multi-account
 
- [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-cross-account.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-cross-account) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-cross-account.svg)](https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
+ [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg)](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 
 Terraform module to create a peering connection between any two VPCs existing in different AWS accounts. 
 This module supports performing this action from a 3rd account (e.g. a "root" account) by specifying the roles to assume for each member account.
 
-**IMPORTANT:** AWS allows a cross-account VPC Peering Connection to be deleted from either the requester's or accepter's side. However, Terraform only allows the VPC Peering Connection to be deleted from the requester's side by removing the corresponding `aws_vpc_peering_connection` resource from your configuration. [Read more about this](https://www.terraform.io/docs/providers/aws/r/vpc_peering_accepter.html) on Terraform's documentation portal.
+**IMPORTANT:** AWS allows a multi-account VPC Peering Connection to be deleted from either the requester's or accepter's side. However, Terraform only allows the VPC Peering Connection to be deleted from the requester's side by removing the corresponding `aws_vpc_peering_connection` resource from your configuration. [Read more about this](https://www.terraform.io/docs/providers/aws/r/vpc_peering_accepter.html) on Terraform's documentation portal.
 
 
 ---
@@ -55,7 +55,7 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 ```hcl
 module "vpc_peering" {
-  source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account.git?ref=master"
+  source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account.git?ref=master"
   namespace        = "eg"
   stage            = "dev"
   name             = "cluster"
@@ -92,7 +92,7 @@ Available targets:
 | delimiter | Delimiter to be used between `namespace`, `stage`, `name`, and `attributes` | string | `-` | no |
 | enabled | Set to false to prevent the module from creating or accessing any resources | string | `true` | no |
 | name | Name  (e.g. `app` or `cluster`) | string | - | yes |
-| namespace | Namespace (e.g. `cp` or `cloudposse`) | string | - | yes |
+| namespace | Namespace (e.g. `eg` or `cp`) | string | - | yes |
 | requester_aws_assume_role_arn | Requester AWS Assume Role ARN | string | - | yes |
 | requester_region | Requester AWS region | string | - | yes |
 | requester_vpc_id | Requestor VPC ID filter | string | `` | no |
@@ -114,7 +114,7 @@ Available targets:
 
 ## Share the Love 
 
-Like this project? Please give it a ★ on [our GitHub](https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account)! (it helps us **a lot**) 
+Like this project? Please give it a ★ on [our GitHub](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account)! (it helps us **a lot**) 
 
 Are you using this project or any of our other projects? Consider [leaving a testimonial][testimonial]. =)
 
@@ -141,7 +141,7 @@ For additional context, refer to some of these links.
 
 **Got a question?**
 
-File a GitHub [issue](https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account/issues), send us an [email][email] or join our [Slack Community][slack].
+File a GitHub [issue](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/issues), send us an [email][email] or join our [Slack Community][slack].
 
 [![README Commercial Support][readme_commercial_support_img]][readme_commercial_support_link]
 
@@ -180,7 +180,7 @@ Signup for [our newsletter][newsletter] that covers everything on our technology
 
 ### Bug Reports & Feature Requests
 
-Please use the [issue tracker](https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account/issues) to report any bugs or file feature requests.
+Please use the [issue tracker](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/issues) to report any bugs or file feature requests.
 
 ### Developing
 
@@ -283,16 +283,16 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
   [we_love_open_source]: https://cpco.io/we-love-open-source
   [module_development]: https://cpco.io/module-development
   [terraform_modules]: https://cpco.io/terraform-modules
-  [readme_header_img]: https://cloudposse.com/readme/header/img?repo=cloudposse/terraform-aws-vpc-peering-cross-account
-  [readme_header_link]: https://cloudposse.com/readme/header/link?repo=cloudposse/terraform-aws-vpc-peering-cross-account
-  [readme_footer_img]: https://cloudposse.com/readme/footer/img?repo=cloudposse/terraform-aws-vpc-peering-cross-account
-  [readme_footer_link]: https://cloudposse.com/readme/footer/link?repo=cloudposse/terraform-aws-vpc-peering-cross-account
-  [readme_commercial_support_img]: https://cloudposse.com/readme/commercial-support/img?repo=cloudposse/terraform-aws-vpc-peering-cross-account
-  [readme_commercial_support_link]: https://cloudposse.com/readme/commercial-support/link?repo=cloudposse/terraform-aws-vpc-peering-cross-account
-  [share_twitter]: https://twitter.com/intent/tweet/?text=terraform-aws-vpc-peering-cross-account&url=https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account
-  [share_linkedin]: https://www.linkedin.com/shareArticle?mini=true&title=terraform-aws-vpc-peering-cross-account&url=https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account
-  [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account
-  [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account
-  [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account
-  [share_email]: mailto:?subject=terraform-aws-vpc-peering-cross-account&body=https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account
-  [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/terraform-aws-vpc-peering-cross-account?pixel&cs=github&cm=readme&an=terraform-aws-vpc-peering-cross-account
+  [readme_header_img]: https://cloudposse.com/readme/header/img?repo=cloudposse/terraform-aws-vpc-peering-multi-account
+  [readme_header_link]: https://cloudposse.com/readme/header/link?repo=cloudposse/terraform-aws-vpc-peering-multi-account
+  [readme_footer_img]: https://cloudposse.com/readme/footer/img?repo=cloudposse/terraform-aws-vpc-peering-multi-account
+  [readme_footer_link]: https://cloudposse.com/readme/footer/link?repo=cloudposse/terraform-aws-vpc-peering-multi-account
+  [readme_commercial_support_img]: https://cloudposse.com/readme/commercial-support/img?repo=cloudposse/terraform-aws-vpc-peering-multi-account
+  [readme_commercial_support_link]: https://cloudposse.com/readme/commercial-support/link?repo=cloudposse/terraform-aws-vpc-peering-multi-account
+  [share_twitter]: https://twitter.com/intent/tweet/?text=terraform-aws-vpc-peering-multi-account&url=https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account
+  [share_linkedin]: https://www.linkedin.com/shareArticle?mini=true&title=terraform-aws-vpc-peering-multi-account&url=https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account
+  [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account
+  [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account
+  [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account
+  [share_email]: mailto:?subject=terraform-aws-vpc-peering-multi-account&body=https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account
+  [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/terraform-aws-vpc-peering-multi-account?pixel&cs=github&cm=readme&an=terraform-aws-vpc-peering-multi-account
