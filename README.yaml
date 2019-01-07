@@ -69,7 +69,7 @@ usage: |-
   ```hcl
   module "vpc_peering" {
     source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-cross-account.git?ref=master"
-    namespace        = "cp"
+    namespace        = "eg"
     stage            = "dev"
     name             = "cluster"
     requester_vpc_id = "vpc-XXXXXXXX"
