@@ -102,17 +102,18 @@ resource "aws_vpc_peering_connection" "requester" {
 locals {
   requester_aws_route_table_ids           = "${distinct(sort(data.aws_route_table.requester.*.route_table_id))}"
   requester_aws_route_table_ids_count     = "${length(local.requester_aws_route_table_ids)}"
-  requester_cidr_block_associations_count = "${length(data.aws_vpc.requester.cidr_block_associations)}"
+  requester_cidr_block_associations       = "${data.aws_vpc.requester.cidr_block_associations}"
+  requester_cidr_block_associations_count = "${length(local.requester_cidr_block_associations)}"
 }
 
 # Create routes from requester to accepter  
 resource "aws_route" "requester" {
-  count                     = "${local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0}"
-  provider                  = "aws.requester"
-  route_table_id            = "${element(local.requester_aws_route_table_ids, ceil(count.index/local.accepter_cidr_block_associations_count))}"
-  destination_cidr_block    = "${lookup(local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count], "cidr_block")}"
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.requester.id}"
-  depends_on                = ["data.aws_route_table.requester", "aws_vpc_peering_connection.requester", "aws_vpc_peering_connection_accepter.accepter"]
+  count                               = "${local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0}"
+  provider                            = "aws.requester"
+  route_table_id                      = "${element(local.requester_aws_route_table_ids, ceil(count.index/local.accepter_cidr_block_associations_count))}"
+  destination_cidr_block_associations = "${lookup(local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count], "cidr_block")}"
+  vpc_peering_connection_id           = "${aws_vpc_peering_connection.requester.id}"
+  depends_on                          = ["data.aws_route_table.requester", "aws_vpc_peering_connection.requester", "aws_vpc_peering_connection_accepter.accepter"]
 }
 
 output "requester_connection_id" {

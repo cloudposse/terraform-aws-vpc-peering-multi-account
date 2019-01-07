@@ -83,7 +83,8 @@ data "aws_route_table" "accepter" {
 locals {
   accepter_aws_route_table_ids           = "${distinct(sort(data.aws_route_table.accepter.*.route_table_id))}"
   accepter_aws_route_table_ids_count     = "${length(local.accepter_aws_route_table_ids)}"
-  accepter_cidr_block_associations_count = "${length(data.aws_vpc.accepter.cidr_block_associations)}"
+  accepter_cidr_block_associations       = "${data.aws_vpc.accepter.cidr_block_associations}"
+  accepter_cidr_block_associations_count = "${length(local.accepter_cidr_block_associations)}"
 }
 
 # Create routes from accepter to requester
