@@ -10,7 +10,7 @@ variable "requester_region" {
 
 variable "requester_vpc_id" {
   type        = "string"
-  description = "Requestor VPC ID filter"
+  description = "Requester VPC ID filter"
   default     = ""
 }
 
