@@ -68,11 +68,16 @@ data "aws_subnet_ids" "requester" {
   vpc_id   = "${data.aws_vpc.requester.id}"
 }
 
+locals {
+  requester_subnet_ids = "${distinct(sort(data.aws_subnet_ids.requester.ids))}"
+  requester_subnet_ids_count = "${length(local.requester_subnet_ids)}"
+}
+
 # Lookup requester route tables
 data "aws_route_table" "requester" {
-  count     = "${local.enabled ? length(distinct(sort(data.aws_subnet_ids.requester.ids))) : 0}"
+  count     = "${local.enabled ? local.requester_subnet_ids_count : 0}"
   provider  = "aws.requester"
-  subnet_id = "${element(distinct(sort(data.aws_subnet_ids.requester.ids)), count.index)}"
+  subnet_id = "${element(local.requester_subnet_ids, count.index)}"
 }
 
 resource "aws_vpc_peering_connection" "requester" {

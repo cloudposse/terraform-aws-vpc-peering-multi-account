@@ -59,8 +59,8 @@ module "vpc_peering" {
   namespace        = "cp"
   stage            = "dev"
   name             = "cluster"
-  requestor_vpc_id = "vpc-XXXXXXXX"
-  acceptor_vpc_id  = "vpc-YYYYYYYY"
+  requester_vpc_id = "vpc-XXXXXXXX"
+  accepter_vpc_id  = "vpc-YYYYYYYY"
 }
 ```
 

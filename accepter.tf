@@ -69,14 +69,15 @@ data "aws_subnet_ids" "accepter" {
 }
 
 locals {
-  accepter_aws_subnet_ids = "${distinct(sort(data.aws_subnet_ids.accepter.ids))}"
+  accepter_subnet_ids = "${distinct(sort(data.aws_subnet_ids.accepter.ids))}"
+  accepter_subnet_ids_count = "${length(local.accepter_subnet_ids)}"
 }
 
 # Lookup accepter route tables
 data "aws_route_table" "accepter" {
-  count     = "${local.enabled ? length(local.accepter_aws_subnet_ids) : 0}"
+  count     = "${local.enabled ? local.accepter_subnet_ids_count : 0}"
   provider  = "aws.accepter"
-  subnet_id = "${element(local.accepter_aws_subnet_ids, count.index)}"
+  subnet_id = "${element(local.accepter_subnet_ids, count.index)}"
 }
 
 locals {
