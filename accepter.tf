@@ -76,7 +76,7 @@ locals {
   accepter_subnet_ids_count = "${length(local.accepter_subnet_ids)}"
   accepter_vpc_id           = "${join("", data.aws_vpc.accepter.*.id)}"
   accepter_account_id       = "${join("", data.aws_caller_identity.accepter.*.account_id)}"
-  accepter_region           = "${join("", data.aws_region.accepter.*.id)}"
+  accepter_region           = "${join("", data.aws_region.accepter.*.name)}"
 }
 
 # Lookup accepter route tables
