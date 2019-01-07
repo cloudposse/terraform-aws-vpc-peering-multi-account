@@ -15,14 +15,9 @@ variable "accepter_vpc_id" {
 }
 
 variable "accepter_vpc_tags" {
-  type        = "string"
+  type        = "map"
   description = "Accepter VPC Tags filter"
   default     = {}
-}
-
-variable "accepter_allow_remote_vpc_dns_resolution" {
-  default     = "true"
-  description = "Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC"
 }
 
 # Accepter's credentials
@@ -73,12 +68,15 @@ data "aws_vpc" "accepter" {
 data "aws_subnet_ids" "accepter" {
   count    = "${local.count}"
   provider = "aws.accepter"
-  vpc_id   = "${data.aws_vpc.accepter.id}"
+  vpc_id   = "${local.accepter_vpc_id}"
 }
 
 locals {
   accepter_subnet_ids       = "${distinct(sort(flatten(data.aws_subnet_ids.accepter.*.ids)))}"
   accepter_subnet_ids_count = "${length(local.accepter_subnet_ids)}"
+  accepter_vpc_id           = "${join("", data.aws_vpc.accepter.*.id)}"
+  accepter_account_id       = "${join("", data.aws_caller_identity.accepter.*.account_id)}"
+  accepter_region           = "${join("", data.aws_region.accepter.*.id)}"
 }
 
 # Lookup accepter route tables

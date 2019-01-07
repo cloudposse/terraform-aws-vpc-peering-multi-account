@@ -11,17 +11,13 @@ variable "requester_region" {
 variable "requester_vpc_id" {
   type        = "string"
   description = "Requestor VPC ID filter"
+  default     = ""
 }
 
 variable "requester_vpc_tags" {
-  type        = "string"
+  type        = "map"
   description = "Requester VPC Tags filter"
   default     = {}
-}
-
-variable "requester_allow_remote_vpc_dns_resolution" {
-  default     = "true"
-  description = "Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC"
 }
 
 # Requestors's credentials
@@ -72,12 +68,13 @@ data "aws_vpc" "requester" {
 data "aws_subnet_ids" "requester" {
   count    = "${local.count}"
   provider = "aws.requester"
-  vpc_id   = "${data.aws_vpc.requester.id}"
+  vpc_id   = "${local.requester_vpc_id}"
 }
 
 locals {
   requester_subnet_ids       = "${distinct(sort(flatten(data.aws_subnet_ids.requester.*.ids)))}"
   requester_subnet_ids_count = "${length(local.requester_subnet_ids)}"
+  requester_vpc_id           = "${join("", data.aws_vpc.requester.*.id)}"
 }
 
 # Lookup requester route tables
@@ -88,20 +85,12 @@ data "aws_route_table" "requester" {
 }
 
 resource "aws_vpc_peering_connection" "requester" {
-  count       = "${local.count}"
-  provider    = "aws.requester"
-  vpc_id      = "${var.requester_vpc_id}"
-  peer_vpc_id = "${var.accepter_vpc_id}"
-
-  auto_accept = "${var.auto_accept}"
-
-  accepter {
-    allow_remote_vpc_dns_resolution = "${var.accepter_allow_remote_vpc_dns_resolution}"
-  }
-
-  requester {
-    allow_remote_vpc_dns_resolution = "${var.requester_allow_remote_vpc_dns_resolution}"
-  }
+  count         = "${local.count}"
+  provider      = "aws.requester"
+  vpc_id        = "${local.requester_vpc_id}"
+  peer_vpc_id   = "${local.accepter_vpc_id}"
+  peer_owner_id = "${local.accepter_account_id}"
+  auto_accept   = "${var.auto_accept}"
 
   tags = "${module.requester.tags}"
 }
