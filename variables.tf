@@ -4,7 +4,7 @@ variable "enabled" {
 }
 
 variable "namespace" {
-  description = "Namespace (e.g. `cp` or `cloudposse`)"
+  description = "Namespace (e.g. `eg` or `cp`)"
   type        = "string"
 }
 
