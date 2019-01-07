@@ -109,7 +109,7 @@ resource "aws_route" "requester" {
   provider                  = "aws.requester"
   route_table_id            = "${element(local.requester_aws_route_table_ids, ceil(count.index/local.accepter_cidr_block_associations_count))}"
   destination_cidr_block    = "${lookup(local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count], "cidr_block")}"
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.requester.id}"
+  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
   depends_on                = ["data.aws_route_table.requester", "aws_vpc_peering_connection.requester", "aws_vpc_peering_connection_accepter.accepter"]
 }
 

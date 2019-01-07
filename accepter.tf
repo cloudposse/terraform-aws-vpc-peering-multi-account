@@ -95,11 +95,11 @@ locals {
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count                     = "${local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_aws_route_table_ids_count : 0}"
+  count                     = "${local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0}"
   provider                  = "aws.accepter"
   route_table_id            = "${element(local.accepter_aws_route_table_ids, ceil(count.index / local.requester_cidr_block_associations_count))}"
   destination_cidr_block    = "${lookup(local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count], "cidr_block")}"
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.requester.id}"
+  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
   depends_on                = ["data.aws_route_table.accepter", "aws_vpc_peering_connection_accepter.accepter", "aws_vpc_peering_connection.requester"]
 }
 
