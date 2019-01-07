@@ -107,7 +107,7 @@ resource "aws_route" "accepter" {
 resource "aws_vpc_peering_connection_accepter" "accepter" {
   count                     = "${local.count}"
   provider                  = "aws.accepter"
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.requester.id}"
+  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
   auto_accept               = "${var.auto_accept}"
   tags                      = "${module.accepter.tags}"
 }
