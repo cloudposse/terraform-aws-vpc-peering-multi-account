@@ -10,7 +10,14 @@ variable "accepter_region" {
 
 variable "accepter_vpc_id" {
   type        = "string"
-  description = "Acceptor VPC ID"
+  description = "Accepter VPC ID filter"
+  default     = ""
+}
+
+variable "accepter_vpc_tags" {
+  type        = "string"
+  description = "Accepter VPC Tags filter"
+  default     = {}
 }
 
 variable "accepter_allow_remote_vpc_dns_resolution" {
@@ -59,6 +66,7 @@ data "aws_vpc" "accepter" {
   count    = "${local.count}"
   provider = "aws.accepter"
   id       = "${var.accepter_vpc_id}"
+  tags     = "${var.accepter_vpc_tags}"
 }
 
 # Lookup accepter subnets

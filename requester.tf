@@ -10,7 +10,13 @@ variable "requester_region" {
 
 variable "requester_vpc_id" {
   type        = "string"
-  description = "Requestor VPC ID"
+  description = "Requestor VPC ID filter"
+}
+
+variable "requester_vpc_tags" {
+  type        = "string"
+  description = "Requester VPC Tags filter"
+  default     = {}
 }
 
 variable "requester_allow_remote_vpc_dns_resolution" {
@@ -59,6 +65,7 @@ data "aws_vpc" "requester" {
   count    = "${local.count}"
   provider = "aws.requester"
   id       = "${var.requester_vpc_id}"
+  tags     = "${var.requester_vpc_tags}"
 }
 
 # Lookup requester subnets
