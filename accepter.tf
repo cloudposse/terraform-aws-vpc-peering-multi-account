@@ -69,7 +69,7 @@ data "aws_subnet_ids" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids       = "${distinct(sort(data.aws_subnet_ids.accepter.ids))}"
+  accepter_subnet_ids       = "${distinct(sort(flatten(data.aws_subnet_ids.accepter.*.ids)))}"
   accepter_subnet_ids_count = "${length(local.accepter_subnet_ids)}"
 }
 
@@ -83,7 +83,7 @@ data "aws_route_table" "accepter" {
 locals {
   accepter_aws_route_table_ids           = "${distinct(sort(data.aws_route_table.accepter.*.route_table_id))}"
   accepter_aws_route_table_ids_count     = "${length(local.accepter_aws_route_table_ids)}"
-  accepter_cidr_block_associations       = "${data.aws_vpc.accepter.cidr_block_associations}"
+  accepter_cidr_block_associations       = "${flatten(data.aws_vpc.accepter.*.cidr_block_associations)}"
   accepter_cidr_block_associations_count = "${length(local.accepter_cidr_block_associations)}"
 }
 
