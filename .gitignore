@@ -4,9 +4,9 @@
 .terraform.tfstate.lock.info
 
 # Module directory
-.terraform/
+.terraform
 .idea
-terraform-aws-vpc-peering.iml
+*.iml
 
 .build-harness
 build-harness
