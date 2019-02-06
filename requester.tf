@@ -22,7 +22,7 @@ variable "requester_vpc_tags" {
 
 variable "requester_allow_remote_vpc_dns_resolution" {
   default     = "true"
-  description = "Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC"
+  description = "Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC"
 }
 
 # Requestors's credentials
@@ -99,6 +99,7 @@ resource "aws_vpc_peering_connection" "requester" {
   auto_accept   = false
 
   tags = "${module.requester.tags}"
+
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
