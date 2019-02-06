@@ -20,6 +20,11 @@ variable "requester_vpc_tags" {
   default     = {}
 }
 
+variable "requester_allow_remote_vpc_dns_resolution" {
+  default     = "true"
+  description = "Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC"
+}
+
 # Requestors's credentials
 provider "aws" {
   alias  = "requester"
@@ -94,6 +99,19 @@ resource "aws_vpc_peering_connection" "requester" {
   auto_accept   = false
 
   tags = "${module.requester.tags}"
+
+}
+
+resource "aws_vpc_peering_connection_options" "requester" {
+  provider = "aws.requester"
+
+  # As options can't be set until the connection has been accepted
+  # create an explicit dependency on the accepter.
+  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
+
+  requester {
+    allow_remote_vpc_dns_resolution = "${var.requester_allow_remote_vpc_dns_resolution}"
+  }
 }
 
 locals {
@@ -103,7 +121,7 @@ locals {
   requester_cidr_block_associations_count = "${length(local.requester_cidr_block_associations)}"
 }
 
-# Create routes from requester to accepter  
+# Create routes from requester to accepter
 resource "aws_route" "requester" {
   count                     = "${local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0}"
   provider                  = "aws.requester"
