@@ -22,7 +22,7 @@ variable "accepter_vpc_tags" {
 
 variable "accepter_allow_remote_vpc_dns_resolution" {
   default     = "true"
-  description = "Allow acceptor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requestor VPC"
+  description = "Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC"
 }
 
 # Accepter's credentials
