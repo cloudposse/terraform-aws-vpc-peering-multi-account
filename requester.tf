@@ -99,6 +99,7 @@ resource "aws_vpc_peering_connection" "requester" {
   auto_accept   = false
 
   tags = "${module.requester.tags}"
+
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
@@ -106,7 +107,7 @@ resource "aws_vpc_peering_connection_options" "requester" {
 
   # As options can't be set until the connection has been accepted
   # create an explicit dependency on the accepter.
-  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.accepter.*.id)}"
+  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
 
   requester {
     allow_remote_vpc_dns_resolution = "${var.requester_allow_remote_vpc_dns_resolution}"
