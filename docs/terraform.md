@@ -2,6 +2,7 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| accepter_allow_remote_vpc_dns_resolution | Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC | string | `true` | no |
 | accepter_aws_assume_role_arn | Accepter AWS Assume Role ARN | string | - | yes |
 | accepter_region | Accepter AWS region | string | - | yes |
 | accepter_vpc_id | Accepter VPC ID filter | string | `` | no |
@@ -12,9 +13,10 @@
 | enabled | Set to false to prevent the module from creating or accessing any resources | string | `true` | no |
 | name | Name  (e.g. `app` or `cluster`) | string | - | yes |
 | namespace | Namespace (e.g. `eg` or `cp`) | string | - | yes |
+| requester_allow_remote_vpc_dns_resolution | Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC | string | `true` | no |
 | requester_aws_assume_role_arn | Requester AWS Assume Role ARN | string | - | yes |
 | requester_region | Requester AWS region | string | - | yes |
-| requester_vpc_id | Requestor VPC ID filter | string | `` | no |
+| requester_vpc_id | Requester VPC ID filter | string | `` | no |
 | requester_vpc_tags | Requester VPC Tags filter | map | `<map>` | no |
 | stage | Stage (e.g. `prod`, `dev`, `staging`) | string | - | yes |
 | tags | Additional tags (e.g. `{"BusinessUnit" = "XYZ"`) | map | `<map>` | no |
