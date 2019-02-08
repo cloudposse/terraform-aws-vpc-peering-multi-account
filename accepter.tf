@@ -120,10 +120,10 @@ resource "aws_vpc_peering_connection_accepter" "accepter" {
 resource "aws_vpc_peering_connection_options" "accepter" {
   provider                  = "aws.accepter"
   vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
-
   accepter {
     allow_remote_vpc_dns_resolution = "${var.accepter_allow_remote_vpc_dns_resolution}"
   }
+
 }
 
 output "accepter_connection_id" {
