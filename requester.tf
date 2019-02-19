@@ -99,7 +99,6 @@ resource "aws_vpc_peering_connection" "requester" {
   auto_accept   = false
 
   tags = "${module.requester.tags}"
-
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
