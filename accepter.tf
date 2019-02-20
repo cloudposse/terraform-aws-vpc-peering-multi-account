@@ -20,6 +20,11 @@ variable "accepter_vpc_tags" {
   default     = {}
 }
 
+variable "accepter_allow_remote_vpc_dns_resolution" {
+  default     = "true"
+  description = "Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC"
+}
+
 # Accepter's credentials
 provider "aws" {
   alias  = "accepter"
@@ -110,6 +115,15 @@ resource "aws_vpc_peering_connection_accepter" "accepter" {
   vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
   auto_accept               = "${var.auto_accept}"
   tags                      = "${module.accepter.tags}"
+}
+
+resource "aws_vpc_peering_connection_options" "accepter" {
+  provider                  = "aws.accepter"
+  vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
+
+  accepter {
+    allow_remote_vpc_dns_resolution = "${var.accepter_allow_remote_vpc_dns_resolution}"
+  }
 }
 
 output "accepter_connection_id" {
