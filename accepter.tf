@@ -85,14 +85,14 @@ locals {
 }
 
 # Lookup accepter route tables
-data "aws_route_table" "accepter" {
-  count     = "${local.enabled ? local.accepter_subnet_ids_count : 0}"
+data "aws_route_tables" "accepter" {
+  count    = "${local.count}"
   provider  = "aws.accepter"
-  subnet_id = "${element(local.accepter_subnet_ids, count.index)}"
+  vpc_id = "${local.accepter_vpc_id}"
 }
 
 locals {
-  accepter_aws_route_table_ids           = "${distinct(sort(data.aws_route_table.accepter.*.route_table_id))}"
+  accepter_aws_route_table_ids           = "${distinct(sort(data.aws_route_tables.accepter.ids))}"
   accepter_aws_route_table_ids_count     = "${length(local.accepter_aws_route_table_ids)}"
   accepter_cidr_block_associations       = "${flatten(data.aws_vpc.accepter.*.cidr_block_associations)}"
   accepter_cidr_block_associations_count = "${length(local.accepter_cidr_block_associations)}"
@@ -105,7 +105,7 @@ resource "aws_route" "accepter" {
   route_table_id            = "${element(local.accepter_aws_route_table_ids, ceil(count.index / local.requester_cidr_block_associations_count))}"
   destination_cidr_block    = "${lookup(local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count], "cidr_block")}"
   vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
-  depends_on                = ["data.aws_route_table.accepter", "aws_vpc_peering_connection_accepter.accepter", "aws_vpc_peering_connection.requester"]
+  depends_on                = ["data.aws_route_tables.accepter", "aws_vpc_peering_connection_accepter.accepter", "aws_vpc_peering_connection.requester"]
 }
 
 # Accepter's side of the connection.
