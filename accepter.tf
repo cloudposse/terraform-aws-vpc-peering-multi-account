@@ -27,8 +27,8 @@ variable "accepter_allow_remote_vpc_dns_resolution" {
 
 # Accepter's credentials
 provider "aws" {
-  alias  = "accepter"
-  region = "${var.accepter_region}"
+  alias   = "accepter"
+  region  = "${var.accepter_region}"
   version = ">= 1.25"
 
   assume_role {
@@ -88,8 +88,8 @@ locals {
 # Lookup accepter route tables
 data "aws_route_tables" "accepter" {
   count    = "${local.count}"
-  provider  = "aws.accepter"
-  vpc_id = "${local.accepter_vpc_id}"
+  provider = "aws.accepter"
+  vpc_id   = "${local.accepter_vpc_id}"
 }
 
 locals {
