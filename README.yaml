@@ -162,10 +162,8 @@ usage: |-
 
   where `XXXXXXXX` is the requester AWS account ID.
 
-  The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM role should have the following Trust Policy:
 
-  __NOTE__: The accepter Trust Policy is the same as the requester Trust Policy since it specifies who can assume the IAM Role.
-  In the requester case, the requester account ID is the trusted entity. For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account.
+  The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` requester IAM role should have the following Trust Policy:
 
   ```js
   {
@@ -182,6 +180,9 @@ usage: |-
     ]
   }
   ```
+
+  __NOTE__: The accepter Trust Policy is the same as the requester Trust Policy since it specifies who can assume the IAM Role.
+  In the requester case, the requester account ID itself is the trusted entity. For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account.
 
   and the following IAM Policy attached to it (NOTE: the policy specifies the permissions to create the required resources in the accepter AWS account):
 
