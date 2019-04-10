@@ -78,7 +78,7 @@ module "vpc_peering_cross_account" {
 }
 ```
 
-The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM role should have the following Trust Policy:
+The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM Role should have the following Trust Policy:
 
 ```js
 {
@@ -153,7 +153,7 @@ __NOTE:__ the policy specifies the permissions to create (with `terraform plan/a
 where `XXXXXXXX` is the requester AWS account ID.
 
 
-The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM role should have the following Trust Policy:
+The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM Role should have the following Trust Policy:
 
 ```js
 {
@@ -172,7 +172,8 @@ The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM rol
 ```
 
 __NOTE__: The accepter Trust Policy is the same as the requester Trust Policy since it defines who can assume the IAM Role.
-In the requester case, the requester account ID itself is the trusted entity. For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account.
+In the requester case, the requester account ID itself is the trusted entity.
+For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account `YYYYYYYY`.
 
 and the following IAM Policy attached to it:
 

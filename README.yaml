@@ -185,7 +185,8 @@ usage: |-
   ```
 
   __NOTE__: The accepter Trust Policy is the same as the requester Trust Policy since it defines who can assume the IAM Role.
-  In the requester case, the requester account ID itself is the trusted entity. For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account.
+  In the requester case, the requester account ID itself is the trusted entity.
+  For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account `YYYYYYYY`.
 
   and the following IAM Policy attached to it:
 
