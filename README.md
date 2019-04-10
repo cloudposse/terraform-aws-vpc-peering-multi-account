@@ -8,7 +8,7 @@
  [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg)](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 
-Terraform module to create a peering connection between any two VPCs existing in different AWS accounts. 
+Terraform module to create a peering connection between any two VPCs existing in different AWS accounts.
 
 This module supports performing this action from a 3rd account (e.g. a "root" account) by specifying the roles to assume for each member account.
 
@@ -54,14 +54,27 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 ## Usage
 
+
+**IMPORTANT:** Do not pin to `master` because there may be breaking changes between releases. Instead pin to the release tag (e.g. `?ref=tags/x.y.z`) of one of our [latest releases](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases).
+
+For a complete example, see [examples/complete](examples/complete)
+
 ```hcl
-module "vpc_peering" {
+module "vpc_peering_cross_account" {
   source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account.git?ref=master"
   namespace        = "eg"
   stage            = "dev"
   name             = "cluster"
-  requester_vpc_id = "vpc-XXXXXXXX"
-  accepter_vpc_id  = "vpc-YYYYYYYY"
+
+  requester_aws_assume_role_arn             = "arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test"
+  requester_region                          = "us-west-2"
+  requester_vpc_id                          = "vpc-XXXXXXXX"
+  requester_allow_remote_vpc_dns_resolution = "true"
+
+  accepter_aws_assume_role_arn             = "arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test"
+  accepter_region                          = "us-east-1"
+  accepter_vpc_id                          = "vpc-YYYYYYYY"
+  accepter_allow_remote_vpc_dns_resolution = "true"
 }
 ```
 
