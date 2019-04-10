@@ -91,7 +91,7 @@ usage: |-
   }
   ```
 
-  The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM role should have the following Trust Policy:
+  The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM Role should have the following Trust Policy:
 
   ```js
   {
@@ -166,7 +166,7 @@ usage: |-
   where `XXXXXXXX` is the requester AWS account ID.
 
 
-  The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM role should have the following Trust Policy:
+  The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM Role should have the following Trust Policy:
 
   ```js
   {
