@@ -80,6 +80,8 @@ module "vpc_peering_cross_account" {
 
 The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM Role should have the following Trust Policy:
 
+<details><summary>Show Trust Policy</summary>
+
 ```js
 {
   "Version": "2012-10-17",
@@ -96,10 +98,14 @@ The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM Ro
 }
 ```
 
+</details>
+<br/>
+
 and the following IAM Policy attached to it:
 
 __NOTE:__ the policy specifies the permissions to create (with `terraform plan/apply`) and delete (with `terraform destroy`) all the required resources in the requester AWS account
 
+<details><summary>Show IAM Policy</summary>
 
 ```js
 {
@@ -150,10 +156,15 @@ __NOTE:__ the policy specifies the permissions to create (with `terraform plan/a
 }
 ```
 
+</details>
+
 where `XXXXXXXX` is the requester AWS account ID.
 
+<br/>
 
 The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM Role should have the following Trust Policy:
+
+<details><summary>Show Trust Policy</summary>
 
 ```js
 {
@@ -171,6 +182,8 @@ The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM Rol
 }
 ```
 
+</details>
+
 __NOTE__: The accepter Trust Policy is the same as the requester Trust Policy since it defines who can assume the IAM Role.
 In the requester case, the requester account ID itself is the trusted entity.
 For the accepter, the Trust Policy specifies that the requester account ID `XXXXXXXX` can assume the role in the accepter AWS account `YYYYYYYY`.
@@ -179,6 +192,7 @@ and the following IAM Policy attached to it:
 
 __NOTE:__ the policy specifies the permissions to create (with `terraform plan/apply`) and delete (with `terraform destroy`) all the required resources in the accepter AWS account
 
+<details><summary>Show IAM Policy</summary>
 
 ```js
 {
@@ -228,6 +242,8 @@ __NOTE:__ the policy specifies the permissions to create (with `terraform plan/a
   ]
 }
 ```
+
+</details>
 
 where `YYYYYYYY` is the accepter AWS account ID.
 
