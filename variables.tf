@@ -40,3 +40,8 @@ variable "auto_accept" {
   default     = "true"
   description = "Automatically accept the peering"
 }
+
+variable "await_peering" {
+  default     = 0
+  description = "Seconds to wait before attaching options to peering"
+}

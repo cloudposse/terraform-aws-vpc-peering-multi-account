@@ -120,6 +120,7 @@ resource "aws_vpc_peering_connection_accepter" "accepter" {
 
 resource "aws_vpc_peering_connection_options" "accepter" {
   provider                  = "aws.accepter"
+  depends_on                = ["null_resource.await_active_peering"]
   vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
 
   accepter {

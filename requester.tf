@@ -102,7 +102,8 @@ resource "aws_vpc_peering_connection" "requester" {
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
-  provider = "aws.requester"
+  provider   = "aws.requester"
+  depends_on = ["null_resource.await_active_peering"]
 
   # As options can't be set until the connection has been accepted
   # create an explicit dependency on the accepter.
@@ -113,29 +114,41 @@ resource "aws_vpc_peering_connection_options" "requester" {
   }
 }
 
+resource "null_resource" "await_active_peering" {
+  count = "${var.await_peering > 0 ? 1 : 0}"
+
+  provisioner "local-exec" {
+    command = "sleep ${var.await_peering}"
+  }
+
+  triggers {
+    peering = "${aws_vpc_peering_connection.requester.id}"
+  }
+}
+
 locals {
-  requester_aws_route_table_ids           = "${distinct(sort(data.aws_route_table.requester.*.route_table_id))}"
-  requester_aws_route_table_ids_count     = "${length(local.requester_aws_route_table_ids)}"
-  requester_cidr_block_associations       = "${flatten(data.aws_vpc.requester.*.cidr_block_associations)}"
+  requester_aws_route_table_ids = "${distinct(sort(data.aws_route_table.requester.*.route_table_id))}"
+  requester_aws_route_table_ids_count = "${length(local.requester_aws_route_table_ids)}"
+  requester_cidr_block_associations = "${flatten(data.aws_vpc.requester.*.cidr_block_associations)}"
   requester_cidr_block_associations_count = "${length(local.requester_cidr_block_associations)}"
 }
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count                     = "${local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0}"
-  provider                  = "aws.requester"
-  route_table_id            = "${element(local.requester_aws_route_table_ids, ceil(count.index/local.accepter_cidr_block_associations_count))}"
-  destination_cidr_block    = "${lookup(local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count], "cidr_block")}"
+  count = "${local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0}"
+  provider = "aws.requester"
+  route_table_id = "${element(local.requester_aws_route_table_ids, ceil(count.index / local.accepter_cidr_block_associations_count))}"
+  destination_cidr_block = "${lookup(local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count], "cidr_block")}"
   vpc_peering_connection_id = "${join("", aws_vpc_peering_connection.requester.*.id)}"
-  depends_on                = ["data.aws_route_table.requester", "aws_vpc_peering_connection.requester", "aws_vpc_peering_connection_accepter.accepter"]
+  depends_on = ["data.aws_route_table.requester", "aws_vpc_peering_connection.requester", "aws_vpc_peering_connection_accepter.accepter"]
 }
 
 output "requester_connection_id" {
-  value       = "${join("", aws_vpc_peering_connection.requester.*.id)}"
+  value = "${join("", aws_vpc_peering_connection.requester.*.id)}"
   description = "Requester VPC peering connection ID"
 }
 
 output "requester_accept_status" {
-  value       = "${join("", aws_vpc_peering_connection.requester.*.accept_status)}"
+  value = "${join("", aws_vpc_peering_connection.requester.*.accept_status)}"
   description = "Requester VPC peering connection request status"
 }
