@@ -90,7 +90,7 @@ locals {
 
 # Lookup requester route tables
 data "aws_route_table" "requester" {
-  count     = local.enabled ? local.requester_subnet_ids_count : 0
+  count     = var.enabled ? local.requester_subnet_ids_count : 0
   provider  = aws.requester
   subnet_id = element(local.requester_subnet_ids, count.index)
 }
@@ -128,7 +128,7 @@ locals {
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count    = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  count    = var.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
   provider = aws.requester
   route_table_id = element(
     local.requester_aws_route_table_ids,

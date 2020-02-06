@@ -107,7 +107,7 @@ locals {
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count    = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
+  count    = var.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
   provider = aws.accepter
   route_table_id = element(
     local.accepter_aws_route_table_ids,
