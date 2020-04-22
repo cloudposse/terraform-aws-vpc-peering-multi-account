@@ -1,36 +1,7 @@
-variable "accepter_aws_assume_role_arn" {
-  description = "Accepter AWS Assume Role ARN"
-  type        = string
-}
-
-variable "accepter_region" {
-  type        = string
-  description = "Accepter AWS region"
-}
-
-variable "accepter_vpc_id" {
-  type        = string
-  description = "Accepter VPC ID filter"
-  default     = ""
-}
-
-variable "accepter_vpc_tags" {
-  type        = map(string)
-  description = "Accepter VPC Tags filter"
-  default     = {}
-}
-
-variable "accepter_allow_remote_vpc_dns_resolution" {
-  type        = bool
-  default     = true
-  description = "Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC"
-}
-
 # Accepter's credentials
 provider "aws" {
-  alias   = "accepter"
-  region  = var.accepter_region
-  version = ">= 1.25"
+  alias  = "accepter"
+  region = var.accepter_region
 
   assume_role {
     role_arn = var.accepter_aws_assume_role_arn
@@ -107,12 +78,9 @@ locals {
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count    = var.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
-  provider = aws.accepter
-  route_table_id = element(
-    local.accepter_aws_route_table_ids,
-    ceil(count.index / local.requester_cidr_block_associations_count),
-  )
+  count                     = var.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
+  provider                  = aws.accepter
+  route_table_id            = local.accepter_aws_route_table_ids[ceil(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
   depends_on = [
@@ -133,7 +101,7 @@ resource "aws_vpc_peering_connection_accepter" "accepter" {
 
 resource "aws_vpc_peering_connection_options" "accepter" {
   provider                  = aws.accepter
-  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
+  vpc_peering_connection_id = local.active_vpc_peering_connection_id
 
   accepter {
     allow_remote_vpc_dns_resolution = var.accepter_allow_remote_vpc_dns_resolution
@@ -152,4 +120,3 @@ output "accepter_accept_status" {
   )
   description = "Accepter VPC peering connection request status"
 }
-

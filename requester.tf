@@ -107,12 +107,16 @@ resource "aws_vpc_peering_connection" "requester" {
   tags = module.requester.tags
 }
 
+locals {
+  active_vpc_peering_connection_id = join("", aws_vpc_peering_connection_accepter.accepter.*.id)
+}
+
 resource "aws_vpc_peering_connection_options" "requester" {
   provider = aws.requester
 
   # As options can't be set until the connection has been accepted
   # create an explicit dependency on the accepter.
-  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
+  vpc_peering_connection_id = local.active_vpc_peering_connection_id
 
   requester {
     allow_remote_vpc_dns_resolution = var.requester_allow_remote_vpc_dns_resolution
@@ -128,12 +132,9 @@ locals {
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count    = var.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
-  provider = aws.requester
-  route_table_id = element(
-    local.requester_aws_route_table_ids,
-    ceil(count.index / local.accepter_cidr_block_associations_count),
-  )
+  count                     = var.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  provider                  = aws.requester
+  route_table_id            = local.requester_aws_route_table_ids[ceil(count.index / local.accepter_cidr_block_associations_count)]
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
   depends_on = [

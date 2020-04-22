@@ -43,3 +43,30 @@ variable "auto_accept" {
   description = "Automatically accept the peering"
 }
 
+variable "accepter_aws_assume_role_arn" {
+  description = "Accepter AWS Assume Role ARN"
+  type        = string
+}
+
+variable "accepter_region" {
+  type        = string
+  description = "Accepter AWS region"
+}
+
+variable "accepter_vpc_id" {
+  type        = string
+  description = "Accepter VPC ID filter"
+  default     = ""
+}
+
+variable "accepter_vpc_tags" {
+  type        = map(string)
+  description = "Accepter VPC Tags filter"
+  default     = {}
+}
+
+variable "accepter_allow_remote_vpc_dns_resolution" {
+  type        = bool
+  default     = true
+  description = "Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC"
+}
