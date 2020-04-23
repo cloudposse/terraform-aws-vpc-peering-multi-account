@@ -31,9 +31,13 @@ provider "aws" {
   alias  = "requester"
   region = var.requester_region
 
-  assume_role {
-    role_arn = var.requester_aws_assume_role_arn
+  dynamic "assume_role" {
+    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
+    content {
+      role_arn = var.requester_aws_assume_role_arn
+    }
   }
+
 }
 
 locals {

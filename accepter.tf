@@ -3,8 +3,11 @@ provider "aws" {
   alias  = "accepter"
   region = var.accepter_region
 
-  assume_role {
-    role_arn = var.accepter_aws_assume_role_arn
+  dynamic "assume_role" {
+    for_each = var.accepter_aws_assume_role_arn != "" ? ["true"] : []
+    content {
+      role_arn = var.accepter_aws_assume_role_arn
+    }
   }
 }
 
