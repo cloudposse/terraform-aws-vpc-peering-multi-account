@@ -17,13 +17,3 @@ output "accepter_accept_status" {
   value       = module.vpc_peering_cross_account.accepter_accept_status
   description = "Accepter VPC peering connection request status"
 }
-
-output "accepter_vpc_id" {
-  value       = module.accepter_vpc.vpc_id
-  description = "Accepter VPC id"
-}
-
-output "requester_vpc_id" {
-  value       = module.requester_vpc.vpc_id
-  description = "Requester VPC id"
-}

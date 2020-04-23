@@ -8,4 +8,4 @@ requester_allow_remote_vpc_dns_resolution = true
 accepter_aws_assume_role_arn              = "arn:aws:iam::126450723953:role/OrganizationAccountAccessRole"
 accepter_region                           = "us-west-1"
 accepter_allow_remote_vpc_dns_resolution  = true
-availability_zones                        = ["us-west-1c", "us-west-1b"]
+availability_zones                        = ["us-west-1c"]

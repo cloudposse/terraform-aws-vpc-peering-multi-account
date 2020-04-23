@@ -1,3 +1,7 @@
+provider "aws" {
+  region = var.region
+}
+
 module "requester_vpc" {
   source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.8.1"
   namespace  = var.namespace
