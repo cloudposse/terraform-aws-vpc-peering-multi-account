@@ -2,7 +2,6 @@ package test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
@@ -19,9 +18,10 @@ func TestExamplesComplete(t *testing.T) {
 		Targets: []string{"module.requester_vpc", "module.requester_subnets", "module.accepter_vpc", "module.accepter_subnets"},
 	}
 
-	// At the end of the test, run `terraform destroy` to clean up any resources that were created
-	// TODO: fix the `Could not satisfy plugin requirements` error
-	//defer terraform.Destroy(t, terraformVpcOnlyOptions)
+	defer func() {
+		terraform.Init(t, terraformVpcOnlyOptions)
+		terraform.Destroy(t, terraformVpcOnlyOptions)
+	}()
 
 	// This will run `terraform init` and `terraform apply` to create VPCs and subnets, required for the test
 	terraform.InitAndApply(t, terraformVpcOnlyOptions)
@@ -45,8 +45,6 @@ func TestExamplesComplete(t *testing.T) {
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
 	terraform.InitAndApply(t, terraformOptions)
 
-	time.Sleep(4 * time.Minute)
-
 	println(terraform.OutputAll(t, terraformOptions))
 
 	// Run `terraform output` to get the value of an output variable
@@ -68,5 +66,4 @@ func TestExamplesComplete(t *testing.T) {
 	requesterAcceptStatus := terraform.Output(t, terraformOptions, "requester_accept_status")
 	// Verify we're getting back the outputs we expect
 	assert.Equal(t, "pending-acceptance", requesterAcceptStatus)
-
 }

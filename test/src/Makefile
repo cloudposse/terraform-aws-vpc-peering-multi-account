@@ -1,4 +1,4 @@
-PACKAGE  = terraform-aws-vpc
+PACKAGE  = terraform-aws-vpc-peering-multi-account
 GOEXE   ?= /usr/bin/go
 GOPATH   = $(CURDIR)/.gopath
 GOBIN    = $(GOPATH)/bin
