@@ -14,7 +14,7 @@ func TestExamplesComplete(t *testing.T) {
 		TerraformDir: "../../examples/vpc-only",
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
-		VarFiles: []string{"fixtures.us-west-1.tfvars"},
+		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 		Targets: []string{"module.requester_vpc", "module.requester_subnets", "module.accepter_vpc", "module.accepter_subnets"},
 	}
 
@@ -33,7 +33,7 @@ func TestExamplesComplete(t *testing.T) {
 		TerraformDir: "../../examples/complete",
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
-		VarFiles: []string{"fixtures.us-west-1.tfvars"},
+		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 		Vars: map[string]interface{}{
 			"requester_vpc_id": requesterVpcId,
 			"accepter_vpc_id": acceptorVpcId,

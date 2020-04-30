@@ -111,6 +111,8 @@ resource "aws_vpc_peering_connection" "requester" {
   tags = module.requester.tags
 }
 
+# Options can't be set until the connection has been accepted and is active,
+# so create an explicit dependency on the accepter when setting options.
 locals {
   active_vpc_peering_connection_id = join("", aws_vpc_peering_connection_accepter.accepter.*.id)
 }
