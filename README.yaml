@@ -35,9 +35,9 @@ github_repo: cloudposse/terraform-aws-vpc-peering-multi-account
 
 # Badges to display
 badges:
-  - name: "Build Status"
-    image: "https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account.svg?branch=master"
-    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc-peering-multi-account"
+  - name: "Codefresh Build Status"
+    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-vpc-peering-multi-account?type=cf-1"
+    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5e9f4c44c2b7b0abe4c11f63"
   - name: "Latest Release"
     image: "https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg"
     url: "https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest"
@@ -82,12 +82,12 @@ usage: |-
     requester_aws_assume_role_arn             = "arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test"
     requester_region                          = "us-west-2"
     requester_vpc_id                          = "vpc-xxxxxxxx"
-    requester_allow_remote_vpc_dns_resolution = "true"
+    requester_allow_remote_vpc_dns_resolution = true
 
     accepter_aws_assume_role_arn             = "arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test"
     accepter_region                          = "us-east-1"
     accepter_vpc_id                          = "vpc-yyyyyyyy"
-    accepter_allow_remote_vpc_dns_resolution = "true"
+    accepter_allow_remote_vpc_dns_resolution = true
   }
   ```
 
