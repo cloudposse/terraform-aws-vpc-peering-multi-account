@@ -58,7 +58,7 @@ data "aws_subnet_ids" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids       = distinct(sort(flatten(data.aws_subnet_ids.accepter.*.ids)))
+  accepter_subnet_ids       = (length(data.aws_subnet_ids.accepter) > 0) ? distinct(sort(flatten(data.aws_subnet_ids.accepter.*.ids))) : []
   accepter_subnet_ids_count = length(local.accepter_subnet_ids)
   accepter_vpc_id           = join("", data.aws_vpc.accepter.*.id)
   accepter_account_id       = join("", data.aws_caller_identity.accepter.*.account_id)
@@ -73,7 +73,7 @@ data "aws_route_tables" "accepter" {
 }
 
 locals {
-  accepter_aws_route_table_ids           = distinct(sort(data.aws_route_tables.accepter[0].ids))
+  accepter_aws_route_table_ids           = (length(data.aws_route_tables.accepter) > 0) ? distinct(sort(data.aws_route_tables.accepter[0].ids)) : []
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
   accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter.*.cidr_block_associations)
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
