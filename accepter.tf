@@ -103,6 +103,7 @@ resource "aws_vpc_peering_connection_accepter" "accepter" {
 }
 
 resource "aws_vpc_peering_connection_options" "accepter" {
+  count                     = local.count
   provider                  = aws.accepter
   vpc_peering_connection_id = local.active_vpc_peering_connection_id
 

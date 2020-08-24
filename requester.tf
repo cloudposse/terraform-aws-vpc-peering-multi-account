@@ -118,6 +118,7 @@ locals {
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
+  count         = local.count
   provider = aws.requester
 
   # As options can't be set until the connection has been accepted
