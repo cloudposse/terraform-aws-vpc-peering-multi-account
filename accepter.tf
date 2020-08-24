@@ -73,7 +73,7 @@ data "aws_route_tables" "accepter" {
 }
 
 locals {
-  accepter_aws_route_table_ids           = distinct(sort(data.aws_route_tables.accepter[0].ids))
+  accepter_aws_route_table_ids           = try(distinct(sort(data.aws_route_tables.accepter[0].ids)), "")
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
   accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter.*.cidr_block_associations)
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
