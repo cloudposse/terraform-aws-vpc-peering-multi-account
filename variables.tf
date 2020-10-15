@@ -65,6 +65,12 @@ variable "accepter_vpc_tags" {
   default     = {}
 }
 
+variable "accepter_subnet_tags" {
+  type        = map(string)
+  description = "Only add peer routes to accepter VPC route tables of subnets matching these tags"
+  default     = {}
+}
+
 variable "accepter_allow_remote_vpc_dns_resolution" {
   type        = bool
   default     = true
