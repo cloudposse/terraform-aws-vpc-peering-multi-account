@@ -55,6 +55,7 @@ data "aws_subnet_ids" "accepter" {
   count    = local.count
   provider = aws.accepter
   vpc_id   = local.accepter_vpc_id
+  tags     = var.accepter_subnet_tags
 }
 
 locals {

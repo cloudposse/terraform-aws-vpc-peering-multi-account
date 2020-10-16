@@ -8,6 +8,12 @@ variable "requester_region" {
   description = "Requester AWS region"
 }
 
+variable "requester_subnet_tags" {
+  type        = map(string)
+  description = "Only add peer routes to requester VPC route tables of subnets matching these tags"
+  default     = {}
+}
+
 variable "requester_vpc_id" {
   type        = string
   description = "Requester VPC ID filter"
@@ -84,6 +90,7 @@ data "aws_subnet_ids" "requester" {
   count    = local.count
   provider = aws.requester
   vpc_id   = local.requester_vpc_id
+  tags     = var.requester_subnet_tags
 }
 
 locals {

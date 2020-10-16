@@ -1,3 +1,4 @@
+<!-- markdownlint-disable -->
 ## Requirements
 
 | Name | Version |
@@ -20,6 +21,7 @@
 | accepter\_allow\_remote\_vpc\_dns\_resolution | Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC | `bool` | `true` | no |
 | accepter\_aws\_assume\_role\_arn | Accepter AWS Assume Role ARN | `string` | n/a | yes |
 | accepter\_region | Accepter AWS region | `string` | n/a | yes |
+| accepter\_subnet\_tags | Only add peer routes to accepter VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | accepter\_vpc\_id | Accepter VPC ID filter | `string` | `""` | no |
 | accepter\_vpc\_tags | Accepter VPC Tags filter | `map(string)` | `{}` | no |
 | attributes | Additional attributes (e.g. `a` or `b`) | `list(string)` | `[]` | no |
@@ -31,6 +33,7 @@
 | requester\_allow\_remote\_vpc\_dns\_resolution | Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC | `bool` | `true` | no |
 | requester\_aws\_assume\_role\_arn | Requester AWS Assume Role ARN | `string` | n/a | yes |
 | requester\_region | Requester AWS region | `string` | n/a | yes |
+| requester\_subnet\_tags | Only add peer routes to requester VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | requester\_vpc\_id | Requester VPC ID filter | `string` | `""` | no |
 | requester\_vpc\_tags | Requester VPC Tags filter | `map(string)` | `{}` | no |
 | stage | Stage (e.g. `prod`, `dev`, `staging`) | `string` | n/a | yes |
@@ -45,3 +48,4 @@
 | requester\_accept\_status | Requester VPC peering connection request status |
 | requester\_connection\_id | Requester VPC peering connection ID |
 
+<!-- markdownlint-restore -->
