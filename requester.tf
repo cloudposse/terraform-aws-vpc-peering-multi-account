@@ -34,8 +34,9 @@ variable "requester_allow_remote_vpc_dns_resolution" {
 
 # Requestors's credentials
 provider "aws" {
-  alias  = "requester"
-  region = var.requester_region
+  alias                   = "requester"
+  region                  = var.requester_region
+  skip_metadata_api_check = var.skip_metadata_api_check
 
   dynamic "assume_role" {
     for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []

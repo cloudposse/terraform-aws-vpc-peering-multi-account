@@ -328,6 +328,7 @@ Available targets:
 | requester\_subnet\_tags | Only add peer routes to requester VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | requester\_vpc\_id | Requester VPC ID filter | `string` | `""` | no |
 | requester\_vpc\_tags | Requester VPC Tags filter | `map(string)` | `{}` | no |
+| skip\_metadata\_api\_check | Don't use the credentials of EC2 instance profile | `bool` | `false` | no |
 | stage | Stage (e.g. `prod`, `dev`, `staging`) | `string` | n/a | yes |
 | tags | Additional tags (e.g. `{"BusinessUnit" = "XYZ"`) | `map(string)` | `{}` | no |
 
