@@ -4,15 +4,15 @@
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12 |
-| aws | ~> 2.0 |
-| null | ~> 2.0 |
+| aws | >= 2.0 |
+| null | >= 2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws.accepter | ~> 2.0 |
-| aws.requester | ~> 2.0 |
+| aws.accepter | >= 2.0 |
+| aws.requester | >= 2.0 |
 
 ## Inputs
 
