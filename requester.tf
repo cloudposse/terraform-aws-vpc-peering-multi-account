@@ -58,7 +58,7 @@ locals {
 }
 
 module "requester" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
+  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.21.0"
   enabled    = var.enabled
   namespace  = var.namespace
   name       = var.name
@@ -168,4 +168,3 @@ output "requester_accept_status" {
   value       = join("", aws_vpc_peering_connection.requester.*.accept_status)
   description = "Requester VPC peering connection request status"
 }
-
