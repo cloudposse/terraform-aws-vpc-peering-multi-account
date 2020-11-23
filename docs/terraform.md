@@ -1,3 +1,4 @@
+<!-- markdownlint-disable -->
 ## Requirements
 
 | Name | Version |
@@ -45,3 +46,4 @@
 | requester\_accept\_status | Requester VPC peering connection request status |
 | requester\_connection\_id | Requester VPC peering connection ID |
 
+<!-- markdownlint-restore -->
