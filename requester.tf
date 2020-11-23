@@ -95,7 +95,7 @@ data "aws_subnet_ids" "requester" {
 }
 
 locals {
-  requester_subnet_ids       = distinct(sort(flatten(data.aws_subnet_ids.requester.*.ids)))
+  requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnet_ids.requester.*.ids))), [])
   requester_subnet_ids_count = length(local.requester_subnet_ids)
   requester_vpc_id           = join("", data.aws_vpc.requester.*.id)
 }
@@ -139,7 +139,7 @@ resource "aws_vpc_peering_connection_options" "requester" {
 }
 
 locals {
-  requester_aws_route_table_ids           = distinct(sort(data.aws_route_table.requester.*.route_table_id))
+  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester.*.route_table_id)), [])
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
   requester_cidr_block_associations       = flatten(data.aws_vpc.requester.*.cidr_block_associations)
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
