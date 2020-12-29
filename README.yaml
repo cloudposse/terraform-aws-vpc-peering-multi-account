@@ -61,7 +61,9 @@ usage: |2-
 
   ```hcl
   module "vpc_peering_cross_account" {
-    source           = "git::https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account.git?ref=master"
+    source = "cloudposse/vpc-peering-multi-account/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
     namespace        = "eg"
     stage            = "dev"
     name             = "cluster"

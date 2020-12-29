@@ -12,25 +12,13 @@ provider "aws" {
   }
 }
 
-locals {
-  accepter_attributes = concat(var.attributes, ["accepter"])
-  accepter_tags = merge(
-    var.tags,
-    {
-      "Side" = "accepter"
-    },
-  )
-}
-
 module "accepter" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.21.0"
-  enabled    = var.enabled
-  namespace  = var.namespace
-  name       = var.name
-  stage      = var.stage
-  delimiter  = var.delimiter
-  attributes = local.accepter_attributes
-  tags       = local.accepter_tags
+  source     = "cloudposse/label/null"
+  version    = "0.21.0"
+  attributes = ["accepter"]
+  tags       = { "Side" = "accepter" }
+
+  context = module.this.context
 }
 
 data "aws_caller_identity" "accepter" {
@@ -83,7 +71,7 @@ locals {
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count                     = var.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
+  count                     = module.this.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
   provider                  = aws.accepter
   route_table_id            = local.accepter_aws_route_table_ids[ceil(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
