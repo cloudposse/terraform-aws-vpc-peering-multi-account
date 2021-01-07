@@ -14,7 +14,7 @@ provider "aws" {
 
 module "accepter" {
   source     = "cloudposse/label/null"
-  version    = "0.21.0"
+  version    = "0.22.1"
   attributes = ["accepter"]
   tags       = { "Side" = "accepter" }
 
