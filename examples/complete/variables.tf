@@ -4,24 +4,6 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "namespace" {
-  type        = string
-  description = "Namespace (e.g. `eg` or `cp`)"
-  default     = "eg"
-}
-
-variable "stage" {
-  type        = string
-  description = "Stage (e.g. `prod`, `dev`, `staging`)"
-  default     = "testing"
-}
-
-variable "name" {
-  type        = string
-  description = "Name of the application"
-  default     = "vpc-peering"
-}
-
 variable "requester_aws_assume_role_arn" {
   type        = string
   description = "Requester AWS Assume Role ARN"

@@ -1,4 +1,4 @@
 locals {
-  count = var.enabled ? 1 : 0
+  count = module.this.enabled ? 1 : 0
 }
 

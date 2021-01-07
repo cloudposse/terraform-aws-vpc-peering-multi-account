@@ -47,25 +47,13 @@ provider "aws" {
 
 }
 
-locals {
-  requester_attributes = concat(var.attributes, ["requester"])
-  requester_tags = merge(
-    var.tags,
-    {
-      "Side" = "requester"
-    },
-  )
-}
-
 module "requester" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.21.0"
-  enabled    = var.enabled
-  namespace  = var.namespace
-  name       = var.name
-  stage      = var.stage
-  delimiter  = var.delimiter
-  attributes = local.requester_attributes
-  tags       = local.requester_tags
+  source     = "cloudposse/label/null"
+  version    = "0.21.0"
+  attributes = ["requester"]
+  tags       = { "Side" = "requester" }
+
+  context = module.this.context
 }
 
 data "aws_caller_identity" "requester" {
@@ -102,7 +90,7 @@ locals {
 
 # Lookup requester route tables
 data "aws_route_table" "requester" {
-  count     = var.enabled ? local.requester_subnet_ids_count : 0
+  count     = module.this.enabled ? local.requester_subnet_ids_count : 0
   provider  = aws.requester
   subnet_id = element(local.requester_subnet_ids, count.index)
 }
@@ -147,7 +135,7 @@ locals {
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count                     = var.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  count                     = module.this.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
   provider                  = aws.requester
   route_table_id            = local.requester_aws_route_table_ids[ceil(count.index / local.accepter_cidr_block_associations_count)]
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
