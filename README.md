@@ -374,7 +374,7 @@ Are you using this project or any of our other projects? Consider [leaving a tes
 Check out these related projects.
 
 - [terraform-aws-vpc](https://github.com/cloudposse/terraform-aws-vpc) - Terraform Module that defines a VPC with public/private subnets across multiple AZs with Internet Gateways
-- [terraform-aws-vpc-peering](https://github.com/cloudposse/terraform-aws-vpc) - Terraform module to create a peering connection between two VPCs in the same AWS account
+- [terraform-aws-vpc-peering](https://github.com/cloudposse/terraform-aws-vpc-peering) - Terraform module to create a peering connection between two VPCs in the same AWS account
 - [terraform-aws-kops-vpc-peering](https://github.com/cloudposse/terraform-aws-kops-vpc-peering) - Terraform module to create a peering connection between a backing services VPC and a VPC created by Kops
 
 
