@@ -41,7 +41,7 @@ related:
     url: "https://github.com/cloudposse/terraform-aws-vpc"
   - name: "terraform-aws-vpc-peering"
     description: "Terraform module to create a peering connection between two VPCs in the same AWS account"
-    url: "https://github.com/cloudposse/terraform-aws-vpc"
+    url: "https://github.com/cloudposse/terraform-aws-vpc-peering"
   - name: "terraform-aws-kops-vpc-peering"
     description: "Terraform module to create a peering connection between a backing services VPC and a VPC created by Kops"
     url: "https://github.com/cloudposse/terraform-aws-kops-vpc-peering"
