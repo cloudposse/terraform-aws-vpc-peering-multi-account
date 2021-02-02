@@ -2,6 +2,7 @@
 provider "aws" {
   alias                   = "accepter"
   region                  = var.accepter_region
+  profile                 = var.accepter_aws_profile
   skip_metadata_api_check = var.skip_metadata_api_check
 
   dynamic "assume_role" {

@@ -4,6 +4,12 @@ variable "auto_accept" {
   description = "Automatically accept the peering"
 }
 
+variable "accepter_aws_profile" {
+  description = "Profile used to assume accepter_aws_assume_role_arn"
+  type        = string
+  default     = ""
+}
+
 variable "accepter_aws_assume_role_arn" {
   description = "Accepter AWS Assume Role ARN"
   type        = string

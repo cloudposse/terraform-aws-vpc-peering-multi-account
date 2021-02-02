@@ -1,3 +1,9 @@
+variable "requester_aws_profile" {
+  description = "Profile used to assume requester_aws_assume_role_arn"
+  type        = string
+  default     = ""
+}
+
 variable "requester_aws_assume_role_arn" {
   description = "Requester AWS Assume Role ARN"
   type        = string
@@ -36,6 +42,7 @@ variable "requester_allow_remote_vpc_dns_resolution" {
 provider "aws" {
   alias                   = "requester"
   region                  = var.requester_region
+  profile                 = var.requester_aws_profile
   skip_metadata_api_check = var.skip_metadata_api_check
 
   dynamic "assume_role" {
