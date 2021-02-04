@@ -49,7 +49,7 @@ provider "aws" {
 
 module "requester" {
   source     = "cloudposse/label/null"
-  version    = "0.22.1"
+  version    = "0.24.0"
   attributes = ["requester"]
   tags       = { "Side" = "requester" }
 
