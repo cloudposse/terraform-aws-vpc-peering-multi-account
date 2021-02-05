@@ -341,8 +341,8 @@ Available targets:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | accepter\_allow\_remote\_vpc\_dns\_resolution | Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC | `bool` | `true` | no |
-| accepter\_aws\_profile | Profile used to assume `accepter_aws_assume_role_arn` | `string` | `""` | no |
 | accepter\_aws\_assume\_role\_arn | Accepter AWS Assume Role ARN | `string` | n/a | yes |
+| accepter\_aws\_profile | Profile used to assume accepter\_aws\_assume\_role\_arn | `string` | `""` | no |
 | accepter\_region | Accepter AWS region | `string` | n/a | yes |
 | accepter\_subnet\_tags | Only add peer routes to accepter VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | accepter\_vpc\_id | Accepter VPC ID filter | `string` | `""` | no |
@@ -362,8 +362,8 @@ Available targets:
 | namespace | Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp' | `string` | `null` | no |
 | regex\_replace\_chars | Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
 | requester\_allow\_remote\_vpc\_dns\_resolution | Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC | `bool` | `true` | no |
-| requester\_aws\_profile | Profile used to assume `requester_aws_assume_role_arn` | `string` | `""` | no |
 | requester\_aws\_assume\_role\_arn | Requester AWS Assume Role ARN | `string` | n/a | yes |
+| requester\_aws\_profile | Profile used to assume `requester_aws_assume_role_arn` | `string` | `""` | no |
 | requester\_region | Requester AWS region | `string` | n/a | yes |
 | requester\_subnet\_tags | Only add peer routes to requester VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | requester\_vpc\_id | Requester VPC ID filter | `string` | `""` | no |
