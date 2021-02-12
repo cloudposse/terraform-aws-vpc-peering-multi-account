@@ -336,6 +336,29 @@ Available targets:
 | aws.accepter | >= 2.0 |
 | aws.requester | >= 2.0 |
 
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| accepter | cloudposse/label/null | 0.24.1 |
+| requester | cloudposse/label/null | 0.24.1 |
+| this | cloudposse/label/null | 0.24.1 |
+
+## Resources
+
+| Name |
+|------|
+| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/caller_identity) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/region) |
+| [aws_route](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/route) |
+| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/route_table) |
+| [aws_route_tables](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/route_tables) |
+| [aws_subnet_ids](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/subnet_ids) |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/vpc) |
+| [aws_vpc_peering_connection](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection) |
+| [aws_vpc_peering_connection_accepter](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection_accepter) |
+| [aws_vpc_peering_connection_options](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection_options) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -363,7 +386,7 @@ Available targets:
 | regex\_replace\_chars | Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
 | requester\_allow\_remote\_vpc\_dns\_resolution | Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC | `bool` | `true` | no |
 | requester\_aws\_assume\_role\_arn | Requester AWS Assume Role ARN | `string` | n/a | yes |
-| requester\_aws\_profile | Profile used to assume `requester_aws_assume_role_arn` | `string` | `""` | no |
+| requester\_aws\_profile | Profile used to assume requester\_aws\_assume\_role\_arn | `string` | `""` | no |
 | requester\_region | Requester AWS region | `string` | n/a | yes |
 | requester\_subnet\_tags | Only add peer routes to requester VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | requester\_vpc\_id | Requester VPC ID filter | `string` | `""` | no |
@@ -380,7 +403,6 @@ Available targets:
 | accepter\_connection\_id | Accepter VPC peering connection ID |
 | requester\_accept\_status | Requester VPC peering connection request status |
 | requester\_connection\_id | Requester VPC peering connection ID |
-
 <!-- markdownlint-restore -->
 
 
