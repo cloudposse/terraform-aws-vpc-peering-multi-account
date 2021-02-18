@@ -4,9 +4,27 @@ variable "requester_aws_profile" {
   default     = ""
 }
 
+variable "requester_aws_access_key" {
+  description = "Access key id to use in requester account"
+  type        = string
+  default     = ""
+}
+
 variable "requester_aws_assume_role_arn" {
   description = "Requester AWS Assume Role ARN"
   type        = string
+}
+
+variable "requester_aws_secret_key" {
+  description = "Secret access key to use in requester account"
+  type        = string
+  default     = ""
+}
+
+variable "requester_aws_token" {
+  description = "Session token for validating temporary credentials"
+  type        = string
+  default     = ""
 }
 
 variable "requester_region" {
@@ -51,6 +69,10 @@ provider "aws" {
       role_arn = var.requester_aws_assume_role_arn
     }
   }
+
+  access_key = var.requester_aws_access_key
+  secret_key = var.requester_aws_secret_key
+  token      = var.requester_aws_token
 
 }
 

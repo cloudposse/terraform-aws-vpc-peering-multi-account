@@ -11,6 +11,10 @@ provider "aws" {
       role_arn = var.accepter_aws_assume_role_arn
     }
   }
+
+  access_key = var.accepter_aws_access_key
+  secret_key = var.accepter_aws_secret_key
+  token      = var.accepter_aws_token
 }
 
 module "accepter" {
