@@ -7,7 +7,7 @@ variable "requester_aws_profile" {
 variable "requester_aws_access_key" {
   description = "Access key id to use in requester account"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "requester_aws_assume_role_arn" {
@@ -18,13 +18,13 @@ variable "requester_aws_assume_role_arn" {
 variable "requester_aws_secret_key" {
   description = "Secret access key to use in requester account"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "requester_aws_token" {
   description = "Session token for validating temporary credentials"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "requester_region" {

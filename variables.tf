@@ -7,7 +7,7 @@ variable "auto_accept" {
 variable "accepter_aws_access_key" {
   description = "Access key id to use in accepter account"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "accepter_aws_profile" {
@@ -24,13 +24,13 @@ variable "accepter_aws_assume_role_arn" {
 variable "accepter_aws_secret_key" {
   description = "Secret access key to use in accepter account"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "accepter_aws_token" {
   description = "Session token for validating temporary credentials"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "accepter_region" {
