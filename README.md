@@ -348,16 +348,16 @@ Available targets:
 
 | Name |
 |------|
-| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/caller_identity) |
-| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/region) |
-| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/route_table) |
-| [aws_route_tables](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/route_tables) |
-| [aws_route](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/route) |
-| [aws_subnet_ids](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/subnet_ids) |
-| [aws_vpc_peering_connection_accepter](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection_accepter) |
-| [aws_vpc_peering_connection_options](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection_options) |
-| [aws_vpc_peering_connection](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection) |
-| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/vpc) |
+| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) |
+| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_table) |
+| [aws_route_tables](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables) |
+| [aws_subnet_ids](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet_ids) |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) |
+| [aws_vpc_peering_connection](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection) |
+| [aws_vpc_peering_connection_accepter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection_accepter) |
+| [aws_vpc_peering_connection_options](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection_options) |
 
 ## Inputs
 
