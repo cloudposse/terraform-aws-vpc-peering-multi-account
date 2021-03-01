@@ -26,24 +26,27 @@
 
 | Name |
 |------|
-| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/caller_identity) |
-| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/region) |
-| [aws_route](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/route) |
-| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/route_table) |
-| [aws_route_tables](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/route_tables) |
-| [aws_subnet_ids](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/subnet_ids) |
-| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/data-sources/vpc) |
-| [aws_vpc_peering_connection](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection) |
-| [aws_vpc_peering_connection_accepter](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection_accepter) |
-| [aws_vpc_peering_connection_options](https://registry.terraform.io/providers/hashicorp/aws/2.0/docs/resources/vpc_peering_connection_options) |
+| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) |
+| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_table) |
+| [aws_route_tables](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables) |
+| [aws_subnet_ids](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet_ids) |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) |
+| [aws_vpc_peering_connection](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection) |
+| [aws_vpc_peering_connection_accepter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection_accepter) |
+| [aws_vpc_peering_connection_options](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection_options) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | accepter\_allow\_remote\_vpc\_dns\_resolution | Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC | `bool` | `true` | no |
+| accepter\_aws\_access\_key | Access key id to use in accepter account | `string` | `null` | no |
 | accepter\_aws\_assume\_role\_arn | Accepter AWS Assume Role ARN | `string` | n/a | yes |
 | accepter\_aws\_profile | Profile used to assume accepter\_aws\_assume\_role\_arn | `string` | `""` | no |
+| accepter\_aws\_secret\_key | Secret access key to use in accepter account | `string` | `null` | no |
+| accepter\_aws\_token | Session token for validating temporary credentials | `string` | `null` | no |
 | accepter\_region | Accepter AWS region | `string` | n/a | yes |
 | accepter\_subnet\_tags | Only add peer routes to accepter VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | accepter\_vpc\_id | Accepter VPC ID filter | `string` | `""` | no |
@@ -63,8 +66,11 @@
 | namespace | Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp' | `string` | `null` | no |
 | regex\_replace\_chars | Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
 | requester\_allow\_remote\_vpc\_dns\_resolution | Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC | `bool` | `true` | no |
+| requester\_aws\_access\_key | Access key id to use in requester account | `string` | `null` | no |
 | requester\_aws\_assume\_role\_arn | Requester AWS Assume Role ARN | `string` | n/a | yes |
 | requester\_aws\_profile | Profile used to assume requester\_aws\_assume\_role\_arn | `string` | `""` | no |
+| requester\_aws\_secret\_key | Secret access key to use in requester account | `string` | `null` | no |
+| requester\_aws\_token | Session token for validating temporary credentials | `string` | `null` | no |
 | requester\_region | Requester AWS region | `string` | n/a | yes |
 | requester\_subnet\_tags | Only add peer routes to requester VPC route tables of subnets matching these tags | `map(string)` | `{}` | no |
 | requester\_vpc\_id | Requester VPC ID filter | `string` | `""` | no |
