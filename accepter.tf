@@ -113,9 +113,6 @@ output "accepter_connection_id" {
 }
 
 output "accepter_accept_status" {
-  value = join(
-    "",
-    aws_vpc_peering_connection_accepter.accepter.*.accept_status,
-  )
+  value       = join("", aws_vpc_peering_connection_accepter.accepter.*.accept_status)
   description = "Accepter VPC peering connection request status"
 }
