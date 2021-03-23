@@ -61,14 +61,14 @@ locals {
 }
 
 # Lookup accepter route tables
-data "aws_route_tables" "accepter" {
-  count    = local.count
-  provider = aws.accepter
-  vpc_id   = local.accepter_vpc_id
+data "aws_route_table" "accepter" {
+  count     = module.this.enabled ? local.accepter_subnet_ids_count : 0
+  provider  = aws.accepter
+  subnet_id = element(local.accepter_subnet_ids, count.index)
 }
 
 locals {
-  accepter_aws_route_table_ids           = try(distinct(sort(data.aws_route_tables.accepter[0].ids)), [])
+  accepter_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.accepter.*.route_table_id)), [])
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
   accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter.*.cidr_block_associations)
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
@@ -82,7 +82,7 @@ resource "aws_route" "accepter" {
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
   depends_on = [
-    data.aws_route_tables.accepter,
+    data.aws_route_table.accepter,
     aws_vpc_peering_connection_accepter.accepter,
     aws_vpc_peering_connection.requester,
   ]
@@ -113,9 +113,6 @@ output "accepter_connection_id" {
 }
 
 output "accepter_accept_status" {
-  value = join(
-    "",
-    aws_vpc_peering_connection_accepter.accepter.*.accept_status,
-  )
+  value       = join("", aws_vpc_peering_connection_accepter.accepter.*.accept_status)
   description = "Accepter VPC peering connection request status"
 }
