@@ -67,3 +67,9 @@ variable "skip_metadata_api_check" {
   default     = false
   description = "Don't use the credentials of EC2 instance profile"
 }
+
+variable "add_attribute_tag" {
+  type        = bool
+  default     = true
+  description = "If `true` will add additional attribute tag to the requester and accceptor resources"
+}
