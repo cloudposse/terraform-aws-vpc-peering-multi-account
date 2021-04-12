@@ -80,7 +80,7 @@ module "requester" {
   source     = "cloudposse/label/null"
   version    = "0.24.1"
   attributes = var.add_attribute_tag ? ["requester"] : []
-  tags       = var.add_attribute_tag ? { "Side" = "requester" } ? {}
+  tags       = var.add_attribute_tag ? { "Side" = "requester" } : {}
 
   context = module.this.context
 }
