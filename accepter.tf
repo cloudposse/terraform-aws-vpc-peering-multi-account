@@ -20,8 +20,8 @@ provider "aws" {
 module "accepter" {
   source     = "cloudposse/label/null"
   version    = "0.24.1"
-  attributes = ["accepter"]
-  tags       = { "Side" = "accepter" }
+  attributes = var.add_attribute_tag ? ["accepter"] : []
+  tags       = var.add_attribute_tag ? { "Side" = "accepter" } : {}
 
   context = module.this.context
 }
