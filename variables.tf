@@ -4,40 +4,6 @@ variable "auto_accept" {
   description = "Automatically accept the peering"
 }
 
-variable "accepter_aws_access_key" {
-  description = "Access key id to use in accepter account"
-  type        = string
-  default     = null
-}
-
-variable "accepter_aws_profile" {
-  description = "Profile used to assume accepter_aws_assume_role_arn"
-  type        = string
-  default     = ""
-}
-
-variable "accepter_aws_assume_role_arn" {
-  description = "Accepter AWS Assume Role ARN"
-  type        = string
-}
-
-variable "accepter_aws_secret_key" {
-  description = "Secret access key to use in accepter account"
-  type        = string
-  default     = null
-}
-
-variable "accepter_aws_token" {
-  description = "Session token for validating temporary credentials"
-  type        = string
-  default     = null
-}
-
-variable "accepter_region" {
-  type        = string
-  description = "Accepter AWS region"
-}
-
 variable "accepter_vpc_id" {
   type        = string
   description = "Accepter VPC ID filter"
