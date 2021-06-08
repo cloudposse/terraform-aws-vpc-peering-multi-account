@@ -112,6 +112,23 @@ The table below correctly indicates which inputs are required.
 For a complete example, see [examples/complete](examples/complete)
 
 ```hcl
+
+provider "aws" {
+  alias  = "requester"
+  region = "us-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test"
+  }
+}
+
+provider "aws" {
+  alias  = "accepter"
+  region = "us-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test"
+  }
+}
+
 module "vpc_peering_cross_account" {
   source = "cloudposse/vpc-peering-multi-account/aws"
   # Cloud Posse recommends pinning every module to a specific version
@@ -133,7 +150,7 @@ module "vpc_peering_cross_account" {
 }
 ```
 
-The requester IAM Role should have the following Trust Policy:
+The `arn:aws:iam::XXXXXXXX:role/cross-account-vpc-peering-test` requester IAM Role should have the following Trust Policy:
 
 <details><summary>Show Trust Policy</summary>
 
@@ -217,7 +234,7 @@ where `XXXXXXXX` is the requester AWS account ID.
 
 <br/>
 
-The accepter IAM Role should have the following Trust Policy:
+The `arn:aws:iam::YYYYYYYY:role/cross-account-vpc-peering-test` accepter IAM Role should have the following Trust Policy:
 
 <details><summary>Show Trust Policy</summary>
 
