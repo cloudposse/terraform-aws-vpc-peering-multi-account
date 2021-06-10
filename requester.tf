@@ -22,11 +22,6 @@ variable "requester_allow_remote_vpc_dns_resolution" {
   description = "Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC"
 }
 
-# Requestors's credentials
-provider "aws" {
-  alias = "requester"
-}
-
 module "requester" {
   source     = "cloudposse/label/null"
   version    = "0.24.1"

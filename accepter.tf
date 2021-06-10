@@ -1,8 +1,3 @@
-# Accepter's credentials
-provider "aws" {
-  alias = "accepter"
-}
-
 module "accepter" {
   source     = "cloudposse/label/null"
   version    = "0.24.1"
