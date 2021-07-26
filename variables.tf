@@ -4,6 +4,12 @@ variable "auto_accept" {
   description = "Automatically accept the peering"
 }
 
+variable "accepter_enabled" {
+  description = "Flag to enable/disable the accepter side of the peering connection"
+  type        = bool
+  default     = true
+}
+
 variable "accepter_aws_access_key" {
   description = "Access key id to use in accepter account"
   type        = string
@@ -19,6 +25,7 @@ variable "accepter_aws_profile" {
 variable "accepter_aws_assume_role_arn" {
   description = "Accepter AWS Assume Role ARN"
   type        = string
+  default     = null
 }
 
 variable "accepter_aws_secret_key" {

@@ -1,4 +1,7 @@
 locals {
-  count = module.this.enabled ? 1 : 0
-}
+  enabled = module.this.enabled
+  count   = local.enabled ? 1 : 0
 
+  accepter_enabled = local.enabled && var.accepter_enabled
+  accepter_count   = local.enabled && var.accepter_enabled ? 1 : 0
+}

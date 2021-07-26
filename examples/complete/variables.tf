@@ -26,9 +26,16 @@ variable "requester_allow_remote_vpc_dns_resolution" {
   default     = true
 }
 
+variable "accepter_enabled" {
+  description = "Flag to enable/disable the accepter side of the peering connection"
+  type        = bool
+  default     = true
+}
+
 variable "accepter_aws_assume_role_arn" {
   type        = string
   description = "Accepter AWS Assume Role ARN"
+  default     = null
 }
 
 variable "accepter_region" {
