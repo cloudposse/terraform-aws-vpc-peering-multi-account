@@ -340,8 +340,8 @@ Available targets:
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_accepter"></a> [accepter](#module\_accepter) | cloudposse/label/null | 0.24.1 |
-| <a name="module_requester"></a> [requester](#module\_requester) | cloudposse/label/null | 0.24.1 |
+| <a name="module_accepter"></a> [accepter](#module\_accepter) | cloudposse/label/null | 0.25.0 |
+| <a name="module_requester"></a> [requester](#module\_requester) | cloudposse/label/null | 0.25.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.24.1 |
 
 ## Resources
