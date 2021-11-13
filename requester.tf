@@ -80,7 +80,7 @@ module "requester" {
   source     = "cloudposse/label/null"
   version    = "0.25.0"
   attributes = var.add_attribute_tag ? ["requester"] : []
-  tags       = var.add_attribute_tag ? { "Side" = "requester" } : {}
+  tags       = var.add_attribute_tag ? { Side = "requester" } : {}
 
   context = module.this.context
 }
@@ -119,7 +119,7 @@ locals {
 
 # Lookup requester route tables
 data "aws_route_table" "requester" {
-  count     = module.this.enabled ? local.requester_subnet_ids_count : 0
+  count     = local.enabled ? local.requester_subnet_ids_count : 0
   provider  = aws.requester
   subnet_id = element(local.requester_subnet_ids, count.index)
 }
@@ -139,11 +139,12 @@ resource "aws_vpc_peering_connection" "requester" {
 # Options can't be set until the connection has been accepted and is active,
 # so create an explicit dependency on the accepter when setting options.
 locals {
-  active_vpc_peering_connection_id = join("", aws_vpc_peering_connection_accepter.accepter.*.id)
+  active_vpc_peering_connection_id = local.accepter_enabled ? join("", aws_vpc_peering_connection_accepter.accepter.*.id) : null
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
-  count    = local.count
+  # Only provision the options if the accepter side of the peering connection is enabled
+  count    = local.accepter_count
   provider = aws.requester
 
   # As options can't be set until the connection has been accepted
@@ -164,7 +165,7 @@ locals {
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count                     = module.this.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  count                     = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
   provider                  = aws.requester
   route_table_id            = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
@@ -172,7 +173,7 @@ resource "aws_route" "requester" {
   depends_on = [
     data.aws_route_table.requester,
     aws_vpc_peering_connection.requester,
-    aws_vpc_peering_connection_accepter.accepter,
+    aws_vpc_peering_connection_accepter.accepter
   ]
 }
 
