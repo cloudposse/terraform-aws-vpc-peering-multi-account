@@ -64,7 +64,7 @@ provider "aws" {
   skip_metadata_api_check = var.skip_metadata_api_check
 
   dynamic "assume_role" {
-    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
+    for_each = local.enabled && var.requester_aws_assume_role_arn != "" ? ["true"] : []
     content {
       role_arn = var.requester_aws_assume_role_arn
     }
