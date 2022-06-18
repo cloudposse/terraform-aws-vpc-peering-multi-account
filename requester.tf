@@ -175,6 +175,11 @@ resource "aws_route" "requester" {
     aws_vpc_peering_connection.requester,
     aws_vpc_peering_connection_accepter.accepter
   ]
+
+  timeouts {
+    create = var.aws_route_create_timeout
+    delete = var.aws_route_delete_timeout
+  }
 }
 
 output "requester_connection_id" {

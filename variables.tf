@@ -80,3 +80,15 @@ variable "add_attribute_tag" {
   default     = true
   description = "If `true` will add additional attribute tag to the requester and accceptor resources"
 }
+
+variable "aws_route_create_timeout" {
+  type        = string
+  default     = "5m"
+  description = "Time to wait for AWS route creation specifed as a Go Duration, e.g. `2m`"
+}
+
+variable "aws_route_delete_timeout" {
+  type        = string
+  default     = "5m"
+  description = "Time to wait for AWS route deletion specifed as a Go Duration, e.g. `5m`"
+}
