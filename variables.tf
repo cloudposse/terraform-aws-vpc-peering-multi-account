@@ -83,7 +83,7 @@ variable "add_attribute_tag" {
 
 variable "aws_route_create_timeout" {
   type        = string
-  default     = "2m"
+  default     = "5m"
   description = "Time to wait for AWS route creation specifed as a Go Duration, e.g. `2m`"
 }
 
