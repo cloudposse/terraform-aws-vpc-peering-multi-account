@@ -64,36 +64,31 @@ locals {
 }
 
 # Lookup accepter route tables
-data "aws_route_table" "accepter" {
-  count     = local.accepter_enabled ? local.accepter_subnet_ids_count : 0
-  provider  = aws.accepter
-  subnet_id = element(local.accepter_subnet_ids, count.index)
+data "aws_route_tables" "accepter" {
+  count    = local.count
+  provider = aws.accepter
+  vpc_id   = local.accepter_vpc_id
 }
 
 locals {
-  accepter_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.accepter.*.route_table_id)), [])
+  accepter_aws_route_table_ids           = try(distinct(sort(data.aws_route_tables.accepter[0].ids)), [])
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
-  accepter_cidr_block_associations       = try(flatten(data.aws_vpc.accepter.*.cidr_block_associations), [])
+  accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter.*.cidr_block_associations)
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
 }
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count                     = local.accepter_enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
+  count                     = module.this.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
   provider                  = aws.accepter
   route_table_id            = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
   depends_on = [
-    data.aws_route_table.accepter,
+    data.aws_route_tables.accepter,
     aws_vpc_peering_connection_accepter.accepter,
-    aws_vpc_peering_connection.requester
+    aws_vpc_peering_connection.requester,
   ]
-
-  timeouts {
-    create = var.aws_route_create_timeout
-    delete = var.aws_route_delete_timeout
-  }
 }
 
 # Accepter's side of the connection.
