@@ -58,14 +58,14 @@ data "aws_subnets" "accepter" {
   dynamic "filter" {
     for_each = var.accepter_subnet_tags
     content {
-        name   = "tag:${filter.key}"
-        values = [filter.value]
+      name   = "tag:${filter.key}"
+      values = [filter.value]
     }
   }
 }
 
 locals {
-  accepter_subnet_ids       = try( local.accepter_enabled ? data.aws_subnets.accepter[0].ids : [], [])
+  accepter_subnet_ids       = try(local.accepter_enabled ? data.aws_subnets.accepter[0].ids : [], [])
   accepter_subnet_ids_count = length(local.accepter_subnet_ids)
   accepter_vpc_id           = join("", data.aws_vpc.accepter.*.id)
   accepter_account_id       = join("", data.aws_caller_identity.accepter.*.account_id)
@@ -83,13 +83,13 @@ data "aws_route_tables" "accepter" {
   }
 }
 locals {
-  aws_subnets_count = length(data.aws_subnets.accepter.*.ids)
+  aws_subnets_count      = length(data.aws_subnets.accepter.*.ids)
   aws_route_tables_count = length(data.aws_route_tables.accepter.*.ids)
 }
 
 # If we had more subnets than routetables, we should update the default.
 data "aws_route_tables" "default_rts" {
-  count = local.enabled && local.aws_subnets_count > local.aws_route_tables_count ? 1 : 0
+  count    = local.enabled && local.aws_subnets_count > local.aws_route_tables_count ? 1 : 0
   provider = aws.accepter
   vpc_id   = local.accepter_vpc_id
   filter {
