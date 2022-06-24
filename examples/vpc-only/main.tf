@@ -43,27 +43,3 @@ module "accepter_subnets" {
 
   context = module.this.context
 }
-
-module "accepter_vpc" {
-  source     = "cloudposse/vpc/aws"
-  version    = "1.1.0"
-  cidr_block = "172.18.0.0/16"
-
-  context = module.this.context
-}
-
-module "accepter_subnets" {
-  source               = "cloudposse/dynamic-subnets/aws"
-  version              = "2.0.2"
-  availability_zones   = var.availability_zones
-  vpc_id               = module.accepter_vpc.vpc_id
-  igw_id               = module.accepter_vpc.igw_id
-  cidr_block           = module.accepter_vpc.vpc_cidr_block
-  nat_gateway_enabled  = true
-  nat_instance_enabled = false
-
-  context = module.this.context
-  tags = {
-    foo = bar
-  }
-}
