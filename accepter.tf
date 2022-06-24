@@ -79,7 +79,7 @@ locals {
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count                     = module.this.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
+  count                     = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
   provider                  = aws.accepter
   route_table_id            = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
