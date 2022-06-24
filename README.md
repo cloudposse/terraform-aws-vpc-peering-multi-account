@@ -420,6 +420,7 @@ Available targets:
 |------|-------------|
 | <a name="output_accepter_accept_status"></a> [accepter\_accept\_status](#output\_accepter\_accept\_status) | Accepter VPC peering connection request status |
 | <a name="output_accepter_connection_id"></a> [accepter\_connection\_id](#output\_accepter\_connection\_id) | Accepter VPC peering connection ID |
+| <a name="output_accepter_route_table_map"></a> [accepter\_route\_table\_map](#output\_accepter\_route\_table\_map) | Accepter VPC subnet to route table map |
 | <a name="output_requester_accept_status"></a> [requester\_accept\_status](#output\_requester\_accept\_status) | Requester VPC peering connection request status |
 | <a name="output_requester_connection_id"></a> [requester\_connection\_id](#output\_requester\_connection\_id) | Requester VPC peering connection ID |
 <!-- markdownlint-restore -->
