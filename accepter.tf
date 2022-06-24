@@ -89,6 +89,11 @@ resource "aws_route" "accepter" {
     aws_vpc_peering_connection_accepter.accepter,
     aws_vpc_peering_connection.requester,
   ]
+
+  timeouts {
+    create = var.aws_route_create_timeout
+    delete = var.aws_route_delete_timeout
+  }
 }
 
 # Accepter's side of the connection.
