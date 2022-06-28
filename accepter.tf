@@ -149,7 +149,7 @@ output "accepter_accept_status" {
   description = "Accepter VPC peering connection request status"
 }
 
-output "accepter_route_table_map" {
+output "accepter_subnet_route_table_map" {
   value       = local.accepter_aws_rt_map
-  description = "Accepter VPC subnet to route table map"
+  description = "Map of accepter VPC subnet IDs to route table IDs"
 }
