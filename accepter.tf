@@ -48,46 +48,65 @@ data "aws_vpc" "accepter" {
 }
 
 # Lookup accepter subnets
-data "aws_subnet_ids" "accepter" {
+data "aws_subnets" "accepter" {
   count    = local.accepter_count
   provider = aws.accepter
-  vpc_id   = local.accepter_vpc_id
-  tags     = var.accepter_subnet_tags
+  filter {
+    name   = "vpc-id"
+    values = [local.accepter_vpc_id]
+  }
+  tags = var.accepter_subnet_tags
 }
 
 locals {
-  accepter_subnet_ids       = try(distinct(sort(flatten(data.aws_subnet_ids.accepter.*.ids))), [])
+  accepter_subnet_ids       = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
   accepter_subnet_ids_count = length(local.accepter_subnet_ids)
   accepter_vpc_id           = join("", data.aws_vpc.accepter.*.id)
   accepter_account_id       = join("", data.aws_caller_identity.accepter.*.account_id)
   accepter_region           = join("", data.aws_region.accepter.*.name)
 }
 
-# Lookup accepter route tables
-data "aws_route_table" "accepter" {
-  count     = local.accepter_enabled ? local.accepter_subnet_ids_count : 0
-  provider  = aws.accepter
-  subnet_id = element(local.accepter_subnet_ids, count.index)
+data "aws_route_tables" "accepter" {
+  for_each = toset(local.accepter_subnet_ids)
+  provider = aws.accepter
+  vpc_id   = local.accepter_vpc_id
+  filter {
+    name   = "association.subnet-id"
+    values = [each.key]
+  }
+}
+
+# If we had more subnets than routetables, we should update the default.
+data "aws_route_tables" "default_rts" {
+  count    = local.count
+  provider = aws.accepter
+  vpc_id   = local.accepter_vpc_id
+  filter {
+    name   = "association.main"
+    values = ["true"]
+  }
 }
 
 locals {
-  accepter_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.accepter.*.route_table_id)), [])
+  accepter_aws_default_rt_id             = join("", flatten(data.aws_route_tables.default_rts.*.ids))
+  accepter_aws_rt_map                    = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
+  accepter_aws_route_table_ids           = distinct(sort(values(local.accepter_aws_rt_map)))
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
-  accepter_cidr_block_associations       = try(flatten(data.aws_vpc.accepter.*.cidr_block_associations), [])
+  accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter.*.cidr_block_associations)
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
 }
 
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
-  count                     = local.accepter_enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
+  count                     = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
   provider                  = aws.accepter
   route_table_id            = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
   depends_on = [
-    data.aws_route_table.accepter,
+    data.aws_route_tables.accepter,
     aws_vpc_peering_connection_accepter.accepter,
-    aws_vpc_peering_connection.requester
+    aws_vpc_peering_connection.requester,
   ]
 
   timeouts {
@@ -123,4 +142,9 @@ output "accepter_connection_id" {
 output "accepter_accept_status" {
   value       = join("", aws_vpc_peering_connection_accepter.accepter.*.accept_status)
   description = "Accepter VPC peering connection request status"
+}
+
+output "accepter_subnet_route_table_map" {
+  value       = local.accepter_aws_rt_map
+  description = "Map of accepter VPC subnet IDs to route table IDs"
 }
