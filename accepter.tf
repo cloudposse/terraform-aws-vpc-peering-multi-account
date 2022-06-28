@@ -55,13 +55,7 @@ data "aws_subnets" "accepter" {
     name   = "vpc-id"
     values = [local.accepter_vpc_id]
   }
-  dynamic "filter" {
-    for_each = var.accepter_subnet_tags
-    content {
-      name   = "tag:${filter.key}"
-      values = [filter.value]
-    }
-  }
+  tags = var.accepter_subnet_tags
 }
 
 locals {
