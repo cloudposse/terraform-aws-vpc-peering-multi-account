@@ -12,7 +12,7 @@ module "requester_vpc" {
 
 module "requester_subnets" {
   source               = "cloudposse/dynamic-subnets/aws"
-  version              = "0.38.0"
+  version              = "0.39.0"
   availability_zones   = var.availability_zones
   vpc_id               = module.requester_vpc.vpc_id
   igw_id               = module.requester_vpc.igw_id
@@ -33,7 +33,7 @@ module "accepter_vpc" {
 
 module "accepter_subnets" {
   source               = "cloudposse/dynamic-subnets/aws"
-  version              = "0.38.0"
+  version              = "0.39.0"
   availability_zones   = var.availability_zones
   vpc_id               = module.accepter_vpc.vpc_id
   igw_id               = module.accepter_vpc.igw_id
