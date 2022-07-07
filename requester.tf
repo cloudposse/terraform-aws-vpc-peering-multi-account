@@ -104,15 +104,18 @@ data "aws_vpc" "requester" {
 }
 
 # Lookup requester subnets
-data "aws_subnet_ids" "requester" {
+data "aws_subnets" "requester" {
   count    = local.count
   provider = aws.requester
-  vpc_id   = local.requester_vpc_id
-  tags     = var.requester_subnet_tags
+  filter {
+    name   = "vpc-id"
+    values = [local.requester_vpc_id]
+  }
+  tags = var.requester_subnet_tags
 }
 
 locals {
-  requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnet_ids.requester.*.ids))), [])
+  requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnets.requester.*.ids))), [])
   requester_subnet_ids_count = length(local.requester_subnet_ids)
   requester_vpc_id           = join("", data.aws_vpc.requester.*.id)
 }
