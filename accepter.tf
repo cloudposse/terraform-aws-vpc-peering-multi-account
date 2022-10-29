@@ -99,7 +99,7 @@ locals {
   ] : [])
   accepter_cidr_block_associations = flatten([
     data.aws_vpc.accepter.*.cidr_block_associations,
-    accepter_ipv6_cidr_blocks
+    local.accepter_ipv6_cidr_blocks
   ])
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
 }
