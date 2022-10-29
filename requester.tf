@@ -162,7 +162,15 @@ resource "aws_vpc_peering_connection_options" "requester" {
 locals {
   requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester.*.route_table_id)), [])
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
-  requester_cidr_block_associations       = flatten(data.aws_vpc.requester.*.cidr_block_associations)
+  requester_ipv6_cidr_blocks = flatten(length(data.aws_vpc.requester.*.ipv6_cidr_block) > 0 ? [
+    for vpc_temp in data.aws_vpc.requester : {
+      cidr_block = vpc_temp.ipv6_cidr_block
+    }
+  ] : [])
+  requester_cidr_block_associations = flatten([
+    data.aws_vpc.requester.*.cidr_block_associations,
+    local.requester_ipv6_cidr_blocks
+  ])
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
 }
 
