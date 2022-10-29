@@ -168,11 +168,12 @@ locals {
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count                     = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
-  provider                  = aws.requester
-  route_table_id            = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
-  destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
-  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
+  count                       = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  provider                    = aws.requester
+  route_table_id              = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
+  destination_cidr_block      = can(regex("::", local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"])) ? null : local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
+  destination_ipv6_cidr_block = can(regex("::", local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"])) ? local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"] : null
+  vpc_peering_connection_id   = join("", aws_vpc_peering_connection.requester.*.id)
   depends_on = [
     data.aws_route_table.requester,
     aws_vpc_peering_connection.requester,
