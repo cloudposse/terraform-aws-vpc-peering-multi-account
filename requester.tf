@@ -115,9 +115,9 @@ data "aws_subnets" "requester" {
 }
 
 locals {
-  requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnets.requester.*.ids))), [])
+  requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnets.requester[*].ids))), [])
   requester_subnet_ids_count = length(local.requester_subnet_ids)
-  requester_vpc_id           = join("", data.aws_vpc.requester.*.id)
+  requester_vpc_id           = join("", data.aws_vpc.requester[*].id)
 }
 
 # Lookup requester route tables
@@ -142,7 +142,7 @@ resource "aws_vpc_peering_connection" "requester" {
 # Options can't be set until the connection has been accepted and is active,
 # so create an explicit dependency on the accepter when setting options.
 locals {
-  active_vpc_peering_connection_id = local.accepter_enabled ? join("", aws_vpc_peering_connection_accepter.accepter.*.id) : null
+  active_vpc_peering_connection_id = local.accepter_enabled ? join("", aws_vpc_peering_connection_accepter.accepter[*].id) : null
 }
 
 resource "aws_vpc_peering_connection_options" "requester" {
@@ -160,9 +160,9 @@ resource "aws_vpc_peering_connection_options" "requester" {
 }
 
 locals {
-  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester.*.route_table_id)), [])
+  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester[*].route_table_id)), [])
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
-  requester_cidr_block_associations       = flatten(data.aws_vpc.requester.*.cidr_block_associations)
+  requester_cidr_block_associations       = flatten(data.aws_vpc.requester[*].cidr_block_associations)
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
 }
 
@@ -172,7 +172,7 @@ resource "aws_route" "requester" {
   provider                  = aws.requester
   route_table_id            = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
-  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
+  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_table.requester,
     aws_vpc_peering_connection.requester,
@@ -186,11 +186,11 @@ resource "aws_route" "requester" {
 }
 
 output "requester_connection_id" {
-  value       = join("", aws_vpc_peering_connection.requester.*.id)
+  value       = join("", aws_vpc_peering_connection.requester[*].id)
   description = "Requester VPC peering connection ID"
 }
 
 output "requester_accept_status" {
-  value       = join("", aws_vpc_peering_connection.requester.*.accept_status)
+  value       = join("", aws_vpc_peering_connection.requester[*].accept_status)
   description = "Requester VPC peering connection request status"
 }
