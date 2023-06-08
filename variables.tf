@@ -57,6 +57,12 @@ variable "accepter_vpc_tags" {
   default     = {}
 }
 
+variable "accepter_exclude_cidrs" {
+  type        = list
+  description = "Accepter VPC CIDRs for which no routes should be created"
+  default     = []
+}
+
 variable "accepter_subnet_tags" {
   type        = map(string)
   description = "Only add peer routes to accepter VPC route tables of subnets matching these tags"

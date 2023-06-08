@@ -92,7 +92,7 @@ locals {
   accepter_aws_rt_map                    = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
   accepter_aws_route_table_ids           = distinct(sort(values(local.accepter_aws_rt_map)))
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
-  accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter.*.cidr_block_associations)
+  accepter_cidr_block_associations       = [ for assoc in flatten(data.aws_vpc.accepter.*.cidr_block_associations) : assoc if !(contains(var.accepter_exclude_cidrs, assoc.cidr_block)) ]
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
 }
 

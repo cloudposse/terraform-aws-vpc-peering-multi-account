@@ -50,6 +50,12 @@ variable "requester_vpc_tags" {
   default     = {}
 }
 
+variable "requester_exclude_cidrs" {
+  type        = list
+  description = "Requester VPC CIDRs for which no routes should be created"
+  default     = []
+}
+
 variable "requester_allow_remote_vpc_dns_resolution" {
   type        = bool
   default     = true
@@ -162,7 +168,7 @@ resource "aws_vpc_peering_connection_options" "requester" {
 locals {
   requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester.*.route_table_id)), [])
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
-  requester_cidr_block_associations       = flatten(data.aws_vpc.requester.*.cidr_block_associations)
+  requester_cidr_block_associations       = [ for assoc in flatten(data.aws_vpc.requester.*.cidr_block_associations) : assoc if !(contains(var.requester_exclude_cidrs, assoc.cidr_block)) ]
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
 }
 
