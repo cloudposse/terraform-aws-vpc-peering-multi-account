@@ -1,9 +1,3 @@
-variable "region" {
-  type        = string
-  description = "AWS Region"
-  default     = "us-east-1"
-}
-
 variable "requester_aws_assume_role_arn" {
   type        = string
   description = "Requester AWS Assume Role ARN"
@@ -53,9 +47,4 @@ variable "accepter_allow_remote_vpc_dns_resolution" {
   type        = bool
   description = "Allow accepter VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requester VPC"
   default     = true
-}
-
-variable "availability_zones" {
-  type        = list(string)
-  description = "Availability zone IDs"
 }
