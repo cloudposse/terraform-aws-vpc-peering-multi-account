@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.region
+  region = var.requester_region
 }
 
 module "vpc_peering_cross_account" {
