@@ -117,14 +117,19 @@ data "aws_subnets" "requester" {
 locals {
   requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnets.requester[*].ids))), [])
   requester_subnet_ids_count = length(local.requester_subnet_ids)
-  requester_vpc_id           = join("", data.aws_vpc.requester[*].id)
+  requester_vpc_id           = join("", data.aws_vpc.requester.*.id)
+  requester_region           = join("", data.aws_region.requester.*.name)
 }
 
 # Lookup requester route tables
-data "aws_route_table" "requester" {
-  count     = local.enabled ? local.requester_subnet_ids_count : 0
-  provider  = aws.requester
-  subnet_id = element(local.requester_subnet_ids, count.index)
+data "aws_route_tables" "requester" {
+  for_each = toset(local.requester_subnet_ids)
+  provider = aws.requester
+  vpc_id   = local.requester_vpc_id
+  filter {
+    name   = "association.subnet-id"
+    values = [each.key]
+  }
 }
 
 resource "aws_vpc_peering_connection" "requester" {
@@ -160,7 +165,7 @@ resource "aws_vpc_peering_connection_options" "requester" {
 }
 
 locals {
-  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester[*].route_table_id)), [])
+  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_tables.requester.*.route_table_id)), [])
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
   requester_cidr_block_associations       = flatten(data.aws_vpc.requester[*].cidr_block_associations)
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
@@ -174,7 +179,7 @@ resource "aws_route" "requester" {
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
-    data.aws_route_table.requester,
+    data.aws_route_tables.requester,
     aws_vpc_peering_connection.requester,
     aws_vpc_peering_connection_accepter.accepter
   ]
