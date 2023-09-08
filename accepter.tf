@@ -76,7 +76,7 @@ data "aws_route_tables" "accepter" {
 }
 
 # If we had more subnets than routetables, we should update the default.
-data "aws_route_tables" "default_rts" {
+data "aws_route_tables" "accepter_default_rts" {
   count    = local.count
   provider = aws.accepter
   vpc_id   = local.accepter_vpc_id
@@ -87,7 +87,7 @@ data "aws_route_tables" "default_rts" {
 }
 
 locals {
-  accepter_aws_default_rt_id             = join("", flatten(data.aws_route_tables.default_rts[*].ids))
+  accepter_aws_default_rt_id             = join("", flatten(data.aws_route_tables.accepter_default_rts.*.ids))
   accepter_aws_rt_map                    = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
   accepter_aws_route_table_ids           = distinct(sort(values(local.accepter_aws_rt_map)))
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
