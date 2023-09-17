@@ -59,10 +59,10 @@ data "aws_subnets" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids       = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
-  accepter_vpc_id           = join("", data.aws_vpc.accepter[*].id)
-  accepter_account_id       = join("", data.aws_caller_identity.accepter[*].account_id)
-  accepter_region           = join("", data.aws_region.accepter[*].name)
+  accepter_subnet_ids = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
+  accepter_vpc_id     = join("", data.aws_vpc.accepter[*].id)
+  accepter_account_id = join("", data.aws_caller_identity.accepter[*].account_id)
+  accepter_region     = join("", data.aws_region.accepter[*].name)
 }
 
 data "aws_route_tables" "accepter" {
