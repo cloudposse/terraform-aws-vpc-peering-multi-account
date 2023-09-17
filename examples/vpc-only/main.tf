@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 module "requester_vpc" {
-  source     = "cloudposse/vpc/aws"
-  version    = "2.1.0"
+  source                  = "cloudposse/vpc/aws"
+  version                 = "2.1.0"
   ipv4_primary_cidr_block = "172.16.0.0/16"
 
   context = module.this.context
@@ -24,8 +24,8 @@ module "requester_subnets" {
 }
 
 module "accepter_vpc" {
-  source     = "cloudposse/vpc/aws"
-  version    = "2.1.0"
+  source                  = "cloudposse/vpc/aws"
+  version                 = "2.1.0"
   ipv4_primary_cidr_block = "172.17.0.0/16"
 
   context = module.this.context
