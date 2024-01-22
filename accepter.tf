@@ -60,6 +60,7 @@ data "aws_subnets" "accepter" {
 
 data "aws_subnet" "accepter" {
   for_each = toset(flatten(data.aws_subnets.accepter[*].ids))
+  provider = aws.accepter
   id       = each.value
 }
 
