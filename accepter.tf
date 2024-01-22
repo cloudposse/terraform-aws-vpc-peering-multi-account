@@ -58,8 +58,14 @@ data "aws_subnets" "accepter" {
   tags = var.accepter_subnet_tags
 }
 
+data "aws_subnet" "accepter" {
+  for_each = toset(flatten(data.aws_subnets.accepter[*].ids))
+  id       = each.value
+}
+
 locals {
   accepter_subnet_ids = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
+  accepter_cidr_blocks = [for s in data.aws_subnet.accepter : s.cidr_block]
   accepter_vpc_id     = join("", data.aws_vpc.accepter[*].id)
   accepter_account_id = join("", data.aws_caller_identity.accepter[*].account_id)
   accepter_region     = join("", data.aws_region.accepter[*].name)
@@ -91,7 +97,7 @@ locals {
   accepter_aws_rt_map                    = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
   accepter_aws_route_table_ids           = distinct(sort(values(local.accepter_aws_rt_map)))
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
-  accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter[*].cidr_block_associations)
+  accepter_cidr_block_associations       = local.accepter_cidr_blocks
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
 }
 
