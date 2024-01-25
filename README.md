@@ -35,6 +35,12 @@ This module supports performing this action from a 3rd account (e.g. a "root" ac
 However, Terraform only allows the VPC Peering Connection to be deleted from the requester's side by removing the corresponding `aws_vpc_peering_connection` resource from your configuration.
 [Read more about this](https://www.terraform.io/docs/providers/aws/r/vpc_peering_accepter.html) on Terraform's documentation portal.
 
+## Screenshots
+
+
+![vpc-peering](images/vpc-peering.png)
+*VPC Peering Connection in the AWS Web Console*
+
 ---
 > [!NOTE]
 > This project is part of Cloud Posse's comprehensive ["SweetOps"](https://cpco.io/sweetops) approach towards DevOps.
@@ -45,14 +51,6 @@ However, Terraform only allows the VPC Peering Connection to be deleted from the
 > We literally have [*hundreds of terraform modules*][terraform_modules] that are Open Source and well-maintained. Check them out!
 
 [![README Header][readme_header_img]][readme_header_link]
-
-
-
-## Screenshots
-
-
-![vpc-peering](images/vpc-peering.png)
-*VPC Peering Connection in the AWS Web Console*
 
 
 
