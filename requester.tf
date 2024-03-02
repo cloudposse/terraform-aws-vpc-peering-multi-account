@@ -85,16 +85,6 @@ module "requester" {
   context = module.this.context
 }
 
-data "aws_caller_identity" "requester" {
-  count    = local.count
-  provider = aws.requester
-}
-
-data "aws_region" "requester" {
-  count    = local.count
-  provider = aws.requester
-}
-
 # Lookup requester VPC so that we can reference the CIDR
 data "aws_vpc" "requester" {
   count    = local.count
@@ -115,16 +105,19 @@ data "aws_subnets" "requester" {
 }
 
 locals {
-  requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnets.requester[*].ids))), [])
-  requester_subnet_ids_count = length(local.requester_subnet_ids)
-  requester_vpc_id           = join("", data.aws_vpc.requester[*].id)
+  requester_subnet_ids = try(distinct(sort(flatten(data.aws_subnets.requester[*].ids))), [])
+  requester_vpc_id     = join("", data.aws_vpc.requester[*].id)
 }
 
 # Lookup requester route tables
-data "aws_route_table" "requester" {
-  count     = local.enabled ? local.requester_subnet_ids_count : 0
-  provider  = aws.requester
-  subnet_id = element(local.requester_subnet_ids, count.index)
+data "aws_route_tables" "requester" {
+  for_each = toset(local.requester_subnet_ids)
+  provider = aws.requester
+  vpc_id   = local.requester_vpc_id
+  filter {
+    name   = "association.subnet-id"
+    values = [each.key]
+  }
 }
 
 resource "aws_vpc_peering_connection" "requester" {
@@ -159,8 +152,21 @@ resource "aws_vpc_peering_connection_options" "requester" {
   }
 }
 
+# If we had more subnets than routetables, we should update the default.
+data "aws_route_tables" "requester_default_rts" {
+  count    = local.count
+  provider = aws.requester
+  vpc_id   = local.requester_vpc_id
+  filter {
+    name   = "association.main"
+    values = ["true"]
+  }
+}
+
 locals {
-  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester[*].route_table_id)), [])
+  requester_aws_default_rt_id             = join("", flatten(data.aws_route_tables.requester_default_rts[*].ids))
+  requester_aws_rt_map                    = { for s in local.requester_subnet_ids : s => try(data.aws_route_tables.requester[s].ids[0], local.requester_aws_default_rt_id) }
+  requester_aws_route_table_ids           = distinct(sort(values(local.requester_aws_rt_map)))
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
   requester_cidr_block_associations       = flatten(data.aws_vpc.requester[*].cidr_block_associations)
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
@@ -174,7 +180,7 @@ resource "aws_route" "requester" {
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
-    data.aws_route_table.requester,
+    data.aws_route_tables.requester,
     aws_vpc_peering_connection.requester,
     aws_vpc_peering_connection_accepter.accepter
   ]
