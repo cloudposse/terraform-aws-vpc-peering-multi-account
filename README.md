@@ -1,8 +1,6 @@
-
-
 <!-- markdownlint-disable -->
 # terraform-aws-vpc-peering-multi-account <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content="><img align="right" src="https://cloudposse.com/logo-300x69.svg" width="150" /></a>
-<a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/commits"><img src="https://img.shields.io/github/last-commit/cloudposse/terraform-aws-vpc-peering-multi-account.svg?style=for-the-badge" alt="Last Updated"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a>
+<a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a>
 <!-- markdownlint-restore -->
 
 <!--
@@ -39,22 +37,40 @@ However, Terraform only allows the VPC Peering Connection to be deleted from the
 <img src="images/vpc-peering.png" alt="vpc-peering" />*VPC Peering Connection in the AWS Web Console*
 
 
-> [!TIP]
-> #### 👽 Use Atmos with Terraform
-> Cloud Posse uses [`atmos`](https://atmos.tools) to easily orchestrate multiple environments using Terraform. <br/>
-> Works with [Github Actions](https://atmos.tools/integrations/github-actions/), [Atlantis](https://atmos.tools/integrations/atlantis), or [Spacelift](https://atmos.tools/integrations/spacelift).
+---
+> [!NOTE]
+> This project is part of Cloud Posse's comprehensive ["SweetOps"](https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=) approach towards DevOps.
+> <details><summary><strong>Learn More</strong></summary>
+> <a href="https://cpco.io/terraform-modules?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=terraform_modules">
+>   <picture>
+>     <source media="(prefers-color-scheme: dark)" srcset="https://docs.cloudposse.com/images/terraform-open-source-modules-light.svg">
+>     <source media="(prefers-color-scheme: light)" srcset="https://docs.cloudposse.com/images/terraform-open-source-modules-dark.svg">
+>     <img alt="Terraform Open Source Modules" src="https://docs.cloudposse.com/images/terraform-open-source-modules.svg" align="right">
+>   </picture>
+> </a>
 >
-> <details>
-> <summary><strong>Watch demo of using Atmos with Terraform</strong></summary>
-> <img src="https://github.com/cloudposse/atmos/blob/master/docs/demo.gif?raw=true"/><br/>
-> <i>Example of running <a href="https://atmos.tools"><code>atmos</code></a> to manage infrastructure from our <a href="https://atmos.tools/quick-start/">Quick Start</a> tutorial.</i>
-> </detalis>
+>
+> It's 100% Open Source and licensed under the [APACHE2](LICENSE).
+>
+> We literally have [*hundreds of terraform modules*](https://cpco.io/terraform-modules?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=terraform_modules) that are Open Source and well-maintained. Check them out!
+> </details>
 
+<a href="https://cloudposse.com/readme/header/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=readme_header_link"><img src="https://cloudposse.com/readme/header/img"/></a>
 
 
 
 
 ## Usage
+
+
+
+> [!IMPORTANT]
+> In Cloud Posse's examples, we avoid pinning modules to specific versions to prevent discrepancies between the documentation 
+> and the latest released versions. However, for your own projects, we strongly advise pinning each module to the exact version
+> you're using. This practice ensures the stability of your infrastructure. Additionally, we recommend implementing a systematic 
+> approach for updating versions to avoid unexpected changes.
+
+
 
 
 **IMPORTANT:** Do not pin to `master` because there may be breaking changes between releases. Instead pin to the release tag (e.g. `?ref=tags/x.y.z`) of one of our [latest releases](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases).
@@ -312,9 +328,7 @@ Available targets:
 | [aws_vpc_peering_connection_options.accepter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection_options) | resource |
 | [aws_vpc_peering_connection_options.requester](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection_options) | resource |
 | [aws_caller_identity.accepter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_caller_identity.requester](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_region.accepter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
-| [aws_region.requester](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 | [aws_route_tables.accepter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables) | data source |
 | [aws_route_tables.accepter_default_rts](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables) | data source |
 | [aws_route_tables.requester](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables) | data source |
@@ -445,18 +459,28 @@ For additional context, refer to some of these links.
 ## ✨ Contributing
 
 This project is under active development, and we encourage contributions from our community.
-
-
-
 Many thanks to our outstanding contributors:
 
 <a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=cloudposse/terraform-aws-vpc-peering-multi-account&max=24" />
 </a>
 
-For 🐛 bug reports & feature requests, please use the [issue tracker](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/issues).
+### 🐛 Bug Reports & Feature Requests
+
+Please use the [issue tracker](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/issues) to report any bugs or file feature requests.
+
+### 💻 Developing
+
+If you are interested in being a contributor and want to get involved in developing this project or help out with Cloud Posse's other projects, we would love to hear from you! 
+Hit us up in [Slack](https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=slack), in the `#cloudposse` channel.
 
 In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
+ 1. Review our [Code of Conduct](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/?tab=coc-ov-file#code-of-conduct) and [Contributor Guidelines](https://github.com/cloudposse/.github/blob/main/CONTRIBUTING.md).
+ 2. **Fork** the repo on GitHub
+ 3. **Clone** the project to your own machine
+ 4. **Commit** changes to your own branch
+ 5. **Push** your work back up to your fork
+ 6. Submit a **Pull Request** so that we can review your changes
  1. Review our [Code of Conduct](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/?tab=coc-ov-file#code-of-conduct) and [Contributor Guidelines](https://github.com/cloudposse/.github/blob/main/CONTRIBUTING.md).
  2. **Fork** the repo on GitHub
  3. **Clone** the project to your own machine
@@ -469,6 +493,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 ### 🌎 Slack Community
 
 Join our [Open Source Community](https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=slack) on Slack. It's **FREE** for everyone! Our "SweetOps" community is where you get to talk with others who share a similar vision for how to rollout and manage infrastructure. This is the best place to talk shop, ask questions, solicit feedback, and work together as a community to build totally *sweet* infrastructure.
+Join our [Open Source Community](https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=slack) on Slack. It's **FREE** for everyone! Our "SweetOps" community is where you get to talk with others who share a similar vision for how to rollout and manage infrastructure. This is the best place to talk shop, ask questions, solicit feedback, and work together as a community to build totally *sweet* infrastructure.
 
 ### 📰 Newsletter
 
@@ -479,6 +504,38 @@ Dropped straight into your Inbox every week — and usually a 5-minute read.
 
 [Join us every Wednesday via Zoom](https://cloudposse.com/office-hours?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=office_hours) for your weekly dose of insider DevOps trends, AWS news and Terraform insights, all sourced from our SweetOps community, plus a _live Q&A_ that you can’t find anywhere else.
 It's **FREE** for everyone!
+
+## About
+
+This project is maintained by <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=">Cloud Posse, LLC</a>.
+<a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content="><img src="https://cloudposse.com/logo-300x69.svg" align="right" /></a>
+
+We are a [**DevOps Accelerator**](https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=commercial_support) for funded startups and enterprises.
+Use our ready-to-go terraform architecture blueprints for AWS to get up and running quickly.
+We build it with you. You own everything. Your team wins. Plus, we stick around until you succeed.
+
+<a href="https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=commercial_support"><img alt="Learn More" src="https://img.shields.io/badge/learn%20more-success.svg?style=for-the-badge"/></a>
+
+*Your team can operate like a pro today.*
+
+Ensure that your team succeeds by using our proven process and turnkey blueprints. Plus, we stick around until you succeed.
+
+<details>
+  <summary>📚 <strong>See What's Included</strong></summary>
+
+- **Reference Architecture.** You'll get everything you need from the ground up built using 100% infrastructure as code.
+- **Deployment Strategy.** You'll have a battle-tested deployment strategy using GitHub Actions that's automated and repeatable.
+- **Site Reliability Engineering.** You'll have total visibility into your apps and microservices.
+- **Security Baseline.** You'll have built-in governance with accountability and audit logs for all changes.
+- **GitOps.** You'll be able to operate your infrastructure via Pull Requests.
+- **Training.** You'll receive hands-on training so your team can operate what we build.
+- **Questions.** You'll have a direct line of communication between our teams via a Shared Slack channel.
+- **Troubleshooting.** You'll get help to triage when things aren't working.
+- **Code Reviews.** You'll receive constructive feedback on Pull Requests.
+- **Bug Fixes.** We'll rapidly work with you to fix any bugs in our projects.
+</details>
+
+<a href="https://cloudposse.com/readme/commercial-support/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-vpc-peering-multi-account&utm_content=readme_commercial_support_link"><img src="https://cloudposse.com/readme/commercial-support/img"/></a>
 ## License
 
 <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge" alt="License"></a>
