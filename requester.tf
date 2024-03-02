@@ -85,16 +85,6 @@ module "requester" {
   context = module.this.context
 }
 
-data "aws_caller_identity" "requester" {
-  count    = local.count
-  provider = aws.requester
-}
-
-data "aws_region" "requester" {
-  count    = local.count
-  provider = aws.requester
-}
-
 # Lookup requester VPC so that we can reference the CIDR
 data "aws_vpc" "requester" {
   count    = local.count
@@ -174,7 +164,7 @@ data "aws_route_tables" "requester_default_rts" {
 }
 
 locals {
-  requester_aws_default_rt_id             = join("", flatten(data.aws_route_tables.requester_default_rts.*.ids))
+  requester_aws_default_rt_id             = join("", flatten(data.aws_route_tables.requester_default_rts[*].ids))
   requester_aws_rt_map                    = { for s in local.requester_subnet_ids : s => try(data.aws_route_tables.requester[s].ids[0], local.requester_aws_default_rt_id) }
   requester_aws_route_table_ids           = distinct(sort(values(local.requester_aws_rt_map)))
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
