@@ -171,7 +171,7 @@ resource "aws_route" "requester" {
   count                     = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
   provider                  = aws.requester
   route_table_id            = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
-  destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
+  destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_table.requester,
