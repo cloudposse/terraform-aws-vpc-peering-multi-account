@@ -5,3 +5,4 @@ repository:
   description: Terraform module to provision a VPC peering across multiple VPCs in different accounts by using multiple providers
   homepage: https://cloudposse.com/accelerate
   topics: terraform, terraform-module, vpc, aws, peering, multi-account, vpn, multi-provider
+
