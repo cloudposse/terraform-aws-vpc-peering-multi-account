@@ -6,7 +6,7 @@ provider "aws" {
   skip_metadata_api_check = var.skip_metadata_api_check
 
   dynamic "assume_role" {
-    for_each = local.enabled && var.accepter_aws_assume_role_arn != "" ? ["true"] : []
+    for_each = var.accepter_aws_assume_role_arn != "" ? ["true"] : []
     content {
       role_arn = var.accepter_aws_assume_role_arn
     }
@@ -59,11 +59,10 @@ data "aws_subnets" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids       = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
-  accepter_subnet_ids_count = length(local.accepter_subnet_ids)
-  accepter_vpc_id           = join("", data.aws_vpc.accepter.*.id)
-  accepter_account_id       = join("", data.aws_caller_identity.accepter.*.account_id)
-  accepter_region           = join("", data.aws_region.accepter.*.name)
+  accepter_subnet_ids = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
+  accepter_vpc_id     = join("", data.aws_vpc.accepter[*].id)
+  accepter_account_id = join("", data.aws_caller_identity.accepter[*].account_id)
+  accepter_region     = join("", data.aws_region.accepter[*].name)
 }
 
 data "aws_route_tables" "accepter" {
@@ -88,17 +87,17 @@ data "aws_route_tables" "default_rts" {
 }
 
 locals {
-  accepter_aws_default_rt_id         = join("", flatten(data.aws_route_tables.default_rts.*.ids))
+  accepter_aws_default_rt_id         = join("", flatten(data.aws_route_tables.default_rts[*].ids))
   accepter_aws_rt_map                = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
   accepter_aws_route_table_ids       = distinct(sort(values(local.accepter_aws_rt_map)))
   accepter_aws_route_table_ids_count = length(local.accepter_aws_route_table_ids)
-  accepter_ipv6_cidr_blocks = flatten(length(data.aws_vpc.accepter.*.ipv6_cidr_block) > 0 ? [
+  accepter_ipv6_cidr_blocks = flatten(length(data.aws_vpc.accepter[*]ipv6_cidr_block) > 0 ? [
     for vpc_temp in data.aws_vpc.accepter : {
       cidr_block = vpc_temp.ipv6_cidr_block
     }
   ] : [])
   accepter_cidr_block_associations = flatten([
-    data.aws_vpc.accepter.*.cidr_block_associations,
+    data.aws_vpc.accepter[*].cidr_block_associations,
     local.accepter_ipv6_cidr_blocks
   ])
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
@@ -111,7 +110,7 @@ resource "aws_route" "accepter" {
   route_table_id              = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block      = length(split(":", local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"])) > 1 ? null : local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   destination_ipv6_cidr_block = length(split(":", local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"])) > 1 ? local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"] : null
-  vpc_peering_connection_id   = join("", aws_vpc_peering_connection.requester.*.id)
+  vpc_peering_connection_id   = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_tables.accepter,
     aws_vpc_peering_connection_accepter.accepter,
@@ -128,7 +127,7 @@ resource "aws_route" "accepter" {
 resource "aws_vpc_peering_connection_accepter" "accepter" {
   count                     = local.accepter_count
   provider                  = aws.accepter
-  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester.*.id)
+  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   auto_accept               = var.auto_accept
   tags                      = module.accepter.tags
 }
@@ -144,12 +143,12 @@ resource "aws_vpc_peering_connection_options" "accepter" {
 }
 
 output "accepter_connection_id" {
-  value       = join("", aws_vpc_peering_connection_accepter.accepter.*.id)
+  value       = join("", aws_vpc_peering_connection_accepter.accepter[*].id)
   description = "Accepter VPC peering connection ID"
 }
 
 output "accepter_accept_status" {
-  value       = join("", aws_vpc_peering_connection_accepter.accepter.*.accept_status)
+  value       = join("", aws_vpc_peering_connection_accepter.accepter[*].accept_status)
   description = "Accepter VPC peering connection request status"
 }
 

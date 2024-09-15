@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.13.0"
+  required_version = ">= 1.3"
 
   required_providers {
     aws = {
@@ -15,8 +15,8 @@ terraform {
       version = ">= 1.3"
     }
     template = {
-      source  = "hashicorp/template"
-      version = ">= 2.0"
+      source  = "cloudposse/template"
+      version = ">= 2.2"
     }
   }
 }
