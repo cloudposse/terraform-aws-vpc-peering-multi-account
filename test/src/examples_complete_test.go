@@ -20,6 +20,7 @@ func TestExamplesComplete(t *testing.T) {
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
+		Targets: []string{"module.requester_vpc", "module.requester_subnets", "module.accepter_vpc", "module.accepter_subnets"},
 		Vars: map[string]interface{}{
 			"attributes": attributes,
 		},
