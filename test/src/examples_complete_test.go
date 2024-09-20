@@ -1,6 +1,8 @@
 package test
 
 import (
+	"github.com/gruntwork-io/terratest/modules/random"
+	"strings"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -9,13 +11,18 @@ import (
 
 // Test the Terraform module in examples/complete using Terratest.
 func TestExamplesComplete(t *testing.T) {
+	randID := strings.ToLower(random.UniqueId())
+	attributes := []string{randID}
+
 	terraformVpcOnlyOptions := &terraform.Options{
 		// The path to where our Terraform code is located
 		TerraformDir: "../../examples/vpc-only",
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
-		Targets: []string{"module.requester_vpc", "module.requester_subnets", "module.accepter_vpc", "module.accepter_subnets"},
+		Vars: map[string]interface{}{
+			"attributes": attributes,
+		},
 	}
 
 	defer func() {
@@ -37,6 +44,7 @@ func TestExamplesComplete(t *testing.T) {
 		Vars: map[string]interface{}{
 			"requester_vpc_id": requesterVpcId,
 			"accepter_vpc_id": acceptorVpcId,
+			"attributes": attributes,
 		},
 	}
 

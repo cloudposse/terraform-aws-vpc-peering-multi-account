@@ -1,7 +1,6 @@
 variable "region" {
   type        = string
   description = "AWS Region"
-  default     = "us-east-1"
 }
 
 variable "requester_aws_assume_role_arn" {
@@ -12,7 +11,6 @@ variable "requester_aws_assume_role_arn" {
 variable "requester_region" {
   type        = string
   description = "Requester AWS region"
-  default     = "us-west-2"
 }
 
 variable "requester_vpc_id" {
@@ -41,7 +39,6 @@ variable "accepter_aws_assume_role_arn" {
 variable "accepter_region" {
   type        = string
   description = "Accepter AWS region"
-  default     = "us-east-1"
 }
 
 variable "accepter_vpc_id" {
