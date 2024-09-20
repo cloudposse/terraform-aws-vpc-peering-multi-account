@@ -12,9 +12,9 @@ provider "aws" {
     }
   }
 
-  access_key = var.accepter_aws_access_key
-  secret_key = var.accepter_aws_secret_key
-  token      = var.accepter_aws_token
+#  access_key = var.accepter_aws_access_key
+#  secret_key = var.accepter_aws_secret_key
+#  token      = var.accepter_aws_token
 }
 
 module "accepter" {
