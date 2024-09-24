@@ -1,6 +1,7 @@
-#provider "aws" {
-#  region = var.region
-#}
+provider "aws" {
+  region = var.region
+  alias  = "default"
+}
 
 module "vpc_peering_cross_account" {
   source = "../../"
@@ -17,4 +18,9 @@ module "vpc_peering_cross_account" {
   accepter_allow_remote_vpc_dns_resolution = var.accepter_allow_remote_vpc_dns_resolution
 
   context = module.this.context
+
+  providers = {
+    aws.accepter = aws.default
+    aws.requester = aws.default
+  }
 }
