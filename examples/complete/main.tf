@@ -1,6 +1,6 @@
-provider "aws" {
-  region = var.region
-}
+#provider "aws" {
+#  region = var.region
+#}
 
 module "vpc_peering_cross_account" {
   source = "../../"
