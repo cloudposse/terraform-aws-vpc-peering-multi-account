@@ -1,6 +1,6 @@
 provider "aws" {
   region = var.region
-  alias  = "default"
+
 }
 
 module "vpc_peering_cross_account" {
@@ -20,7 +20,7 @@ module "vpc_peering_cross_account" {
   context = module.this.context
 
   providers = {
-    aws.accepter = aws.default
-    aws.requester = aws.default
+    aws.accepter = aws
+    aws.requester = aws
   }
 }
