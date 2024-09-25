@@ -49,7 +49,7 @@ func TestExamplesComplete(t *testing.T) {
 		},
 		EnvVars: map[string]string{
 			"TF_LOG": "debug",
-		}
+		},
 	}
 
 	defer terraform.Destroy(t, terraformOptions)
