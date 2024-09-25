@@ -57,24 +57,24 @@ variable "requester_allow_remote_vpc_dns_resolution" {
 }
 
 # Requestors's credentials
-#provider "aws" {
-#  alias                   = "requester"
-#  region                  = var.requester_region
-#  profile                 = var.requester_aws_profile
-#  skip_metadata_api_check = var.skip_metadata_api_check
-#
-#  dynamic "assume_role" {
-#    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
-#    content {
-#      role_arn = var.requester_aws_assume_role_arn
-#    }
-#  }
-#
-#  access_key = var.requester_aws_access_key
-#  secret_key = var.requester_aws_secret_key
-#  token      = var.requester_aws_token
-#
-#}
+provider "aws" {
+  alias                   = "requester"
+  region                  = var.requester_region
+  profile                 = var.requester_aws_profile
+  skip_metadata_api_check = var.skip_metadata_api_check
+
+  dynamic "assume_role" {
+    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
+    content {
+      role_arn = var.requester_aws_assume_role_arn
+    }
+  }
+
+  access_key = var.requester_aws_access_key
+  secret_key = var.requester_aws_secret_key
+  token      = var.requester_aws_token
+
+}
 
 module "requester" {
   source     = "cloudposse/label/null"
@@ -87,26 +87,26 @@ module "requester" {
 
 data "aws_caller_identity" "requester" {
   count    = local.count
-  # provider = aws.requester
+  provider = aws.requester
 }
 
 data "aws_region" "requester" {
   count    = local.count
-  # provider = aws.requester
+  provider = aws.requester
 }
 
 # Lookup requester VPC so that we can reference the CIDR
 data "aws_vpc" "requester" {
   count    = local.count
-  # provider = aws.requester
-  id       = var.requester_vpc_id
+  provider = aws.requester
+  id       = replace(var.requester_vpc_id, '"', '')
   tags     = var.requester_vpc_tags
 }
 
 # Lookup requester subnets
 data "aws_subnets" "requester" {
   count    = local.count
-  # provider = aws.requester
+  provider = aws.requester
   filter {
     name   = "vpc-id"
     values = [local.requester_vpc_id]
@@ -123,13 +123,13 @@ locals {
 # Lookup requester route tables
 data "aws_route_table" "requester" {
   count     = local.enabled ? local.requester_subnet_ids_count : 0
-  # provider  = aws.requester
+  provider  = aws.requester
   subnet_id = element(local.requester_subnet_ids, count.index)
 }
 
 resource "aws_vpc_peering_connection" "requester" {
   count         = local.count
-  # provider      = aws.requester
+  provider      = aws.requester
   vpc_id        = local.requester_vpc_id
   peer_vpc_id   = local.accepter_vpc_id
   peer_owner_id = local.accepter_account_id
@@ -148,7 +148,7 @@ locals {
 resource "aws_vpc_peering_connection_options" "requester" {
   # Only provision the options if the accepter side of the peering connection is enabled
   count    = local.accepter_count
-  # provider = aws.requester
+  provider = aws.requester
 
   # As options can't be set until the connection has been accepted
   # create an explicit dependency on the accepter.
@@ -169,7 +169,7 @@ locals {
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
   count                     = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
-  # provider                  = aws.requester
+  provider                  = aws.requester
   route_table_id            = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
   destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
