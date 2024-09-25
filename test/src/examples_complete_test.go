@@ -46,11 +46,7 @@ func TestExamplesComplete(t *testing.T) {
 			"requester_vpc_id": requesterVpcId,
 			"accepter_vpc_id": acceptorVpcId,
 			"attributes": attributes,
-		},
-		EnvVars: map[string]string{
-			"TF_LOG": "debug",
-		},
-	}
+		},}
 
 	defer terraform.Destroy(t, terraformOptions)
 
