@@ -160,27 +160,43 @@ resource "aws_vpc_peering_connection_options" "requester" {
 }
 
 locals {
-  requester_aws_route_table_ids       = try(distinct(sort(data.aws_route_table.requester[*].route_table_id)), [])
-  requester_aws_route_table_ids_count = length(local.requester_aws_route_table_ids)
-  requester_ipv6_cidr_blocks = flatten(length(data.aws_vpc.requester[*].ipv6_cidr_block) > 0 ? [
+  requester_aws_route_table_ids           = try(distinct(sort(data.aws_route_table.requester[*].route_table_id)), [])
+  requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
+  requester_cidr_block_associations       = flatten(data.aws_vpc.requester[*].cidr_block_associations)
+  requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
+  requester_ipv6_cidr_blocks_associations = flatten(length(data.aws_vpc.requester[*].ipv6_cidr_block) > 0 ? [
     for vpc_temp in data.aws_vpc.requester : {
       cidr_block = vpc_temp.ipv6_cidr_block
     }
   ] : [])
-  requester_cidr_block_associations = flatten([
-    data.aws_vpc.requester[*].cidr_block_associations,
-    local.requester_ipv6_cidr_blocks
-  ])
-  requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
+  requester_ipv6_cidr_block_associations_count = length(local.requester_ipv6_cidr_blocks_associations)
 }
 
 # Create routes from requester to accepter
 resource "aws_route" "requester" {
-  count                       = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  count                     = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_cidr_block_associations_count : 0
+  provider                  = aws.requester
+  route_table_id            = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
+  destination_cidr_block    = local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
+  vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
+  depends_on = [
+    data.aws_route_table.requester,
+    aws_vpc_peering_connection.requester,
+    aws_vpc_peering_connection_accepter.accepter
+  ]
+
+  timeouts {
+    create = var.aws_route_create_timeout
+    delete = var.aws_route_delete_timeout
+  }
+}
+
+# Create routes from requester to accepter
+resource "aws_route" "requester_ipv6" {
+  count                       = local.enabled ? local.requester_aws_route_table_ids_count * local.accepter_ipv6_cidr_block_associations_count : 0
   provider                    = aws.requester
-  route_table_id              = local.requester_aws_route_table_ids[floor(count.index / local.accepter_cidr_block_associations_count)]
-  destination_cidr_block      = length(split(":", local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"])) > 1 ? null : local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"]
-  destination_ipv6_cidr_block = length(split(":", local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"])) > 1 ? local.accepter_cidr_block_associations[count.index % local.accepter_cidr_block_associations_count]["cidr_block"] : null
+  route_table_id              = local.requester_aws_route_table_ids[floor(count.index / local.accepter_ipv6_cidr_block_associations_count)]
+  destination_ipv6_cidr_block = local.accepter_ipv6_cidr_block_associations[count.index % local.accepter_ipv6_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id   = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_table.requester,
