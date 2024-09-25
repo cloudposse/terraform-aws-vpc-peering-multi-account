@@ -164,12 +164,12 @@ locals {
   requester_aws_route_table_ids_count     = length(local.requester_aws_route_table_ids)
   requester_cidr_block_associations       = flatten(data.aws_vpc.requester[*].cidr_block_associations)
   requester_cidr_block_associations_count = length(local.requester_cidr_block_associations)
-  requester_ipv6_cidr_blocks_associations = flatten(length(data.aws_vpc.requester[*].ipv6_cidr_block) > 0 ? [
+  requester_ipv6_cidr_block_associations = flatten(length(data.aws_vpc.requester[*].ipv6_cidr_block) > 0 ? [
     for vpc_temp in data.aws_vpc.requester : {
       cidr_block = vpc_temp.ipv6_cidr_block
     }
   ] : [])
-  requester_ipv6_cidr_block_associations_count = length(local.requester_ipv6_cidr_blocks_associations)
+  requester_ipv6_cidr_block_associations_count = length(local.requester_ipv6_cidr_block_associations)
 }
 
 # Create routes from requester to accepter
