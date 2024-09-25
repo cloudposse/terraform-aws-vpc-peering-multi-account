@@ -57,24 +57,24 @@ variable "requester_allow_remote_vpc_dns_resolution" {
 }
 
 # Requestors's credentials
-#provider "aws" {
-#  alias                   = "requester"
-#  region                  = var.requester_region
-#  profile                 = var.requester_aws_profile
-#  skip_metadata_api_check = var.skip_metadata_api_check
-#
-#  dynamic "assume_role" {
-#    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
-#    content {
-#      role_arn = var.requester_aws_assume_role_arn
-#    }
-#  }
-#
-#  access_key = var.requester_aws_access_key
-#  secret_key = var.requester_aws_secret_key
-#  token      = var.requester_aws_token
-#
-#}
+provider "aws" {
+  alias                   = "requester"
+  region                  = var.requester_region
+  profile                 = var.requester_aws_profile
+  skip_metadata_api_check = var.skip_metadata_api_check
+
+  dynamic "assume_role" {
+    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
+    content {
+      role_arn = var.requester_aws_assume_role_arn
+    }
+  }
+
+  access_key = var.requester_aws_access_key
+  secret_key = var.requester_aws_secret_key
+  token      = var.requester_aws_token
+
+}
 
 module "requester" {
   source     = "cloudposse/label/null"
