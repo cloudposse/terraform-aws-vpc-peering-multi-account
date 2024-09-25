@@ -99,7 +99,7 @@ data "aws_region" "requester" {
 data "aws_vpc" "requester" {
   count    = local.count
   provider = aws.requester
-  id       = replace(var.requester_vpc_id, '"', '')
+  id       = replace(var.requester_vpc_id, "\"", "")
   tags     = var.requester_vpc_tags
 }
 

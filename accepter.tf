@@ -43,7 +43,7 @@ data "aws_region" "accepter" {
 data "aws_vpc" "accepter" {
   count    = local.accepter_count
   provider = aws.accepter
-  id       = replace(var.accepter_vpc_id, '"', '')
+  id       = replace(var.accepter_vpc_id, "\"", "")
   tags     = var.accepter_vpc_tags
 }
 
