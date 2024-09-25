@@ -100,6 +100,12 @@ locals {
   accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
   accepter_cidr_block_associations       = local.accepter_cidr_blocks
   accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
+  accepter_ipv6_cidr_block_associations = flatten(length(data.aws_vpc.accepter[*].ipv6_cidr_block) > 0 ? [
+    for vpc_temp in data.aws_vpc.accepter : {
+      cidr_block = vpc_temp.ipv6_cidr_block
+    }
+  ] : [])
+  accepter_ipv6_cidr_block_associations_count = length(local.accepter_ipv6_cidr_block_associations)
 }
 
 # Create routes from accepter to requester
@@ -109,6 +115,25 @@ resource "aws_route" "accepter" {
   route_table_id            = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
+  depends_on = [
+    data.aws_route_tables.accepter,
+    aws_vpc_peering_connection_accepter.accepter,
+    aws_vpc_peering_connection.requester,
+  ]
+
+  timeouts {
+    create = var.aws_route_create_timeout
+    delete = var.aws_route_delete_timeout
+  }
+}
+
+# Create routes from accepter to requester
+resource "aws_route" "accepter_ipv6" {
+  count                       = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_ipv6_cidr_block_associations_count : 0
+  provider                    = aws.accepter
+  route_table_id              = local.accepter_aws_route_table_ids[floor(count.index / local.requester_ipv6_cidr_block_associations_count)]
+  destination_ipv6_cidr_block = local.requester_ipv6_cidr_block_associations[count.index % local.requester_ipv6_cidr_block_associations_count]["cidr_block"]
+  vpc_peering_connection_id   = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_tables.accepter,
     aws_vpc_peering_connection_accepter.accepter,
