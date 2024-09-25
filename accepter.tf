@@ -1,21 +1,21 @@
 # Accepter's credentials
-#provider "aws" {
-#  alias                   = "accepter"
-#  region                  = var.accepter_region
-#  profile                 = var.accepter_aws_profile
-#  skip_metadata_api_check = var.skip_metadata_api_check
-#
-#  dynamic "assume_role" {
-#    for_each = var.accepter_aws_assume_role_arn != "" ? ["true"] : []
-#    content {
-#      role_arn = var.accepter_aws_assume_role_arn
-#    }
-#  }
-#
-#  #  access_key = var.accepter_aws_access_key
-#  #  secret_key = var.accepter_aws_secret_key
-#  #  token      = var.accepter_aws_token
-#}
+provider "aws" {
+  alias                   = "accepter"
+  region                  = var.accepter_region
+  profile                 = var.accepter_aws_profile
+  skip_metadata_api_check = var.skip_metadata_api_check
+
+  dynamic "assume_role" {
+    for_each = var.accepter_aws_assume_role_arn != "" ? ["true"] : []
+    content {
+      role_arn = var.accepter_aws_assume_role_arn
+    }
+  }
+
+    access_key = var.accepter_aws_access_key
+    secret_key = var.accepter_aws_secret_key
+    token      = var.accepter_aws_token
+}
 
 module "accepter" {
   source  = "cloudposse/label/null"
@@ -31,26 +31,26 @@ module "accepter" {
 
 data "aws_caller_identity" "accepter" {
   count    = local.accepter_count
-  # provider = aws.accepter
+  provider = aws.accepter
 }
 
 data "aws_region" "accepter" {
   count    = local.accepter_count
-  # provider = aws.accepter
+  provider = aws.accepter
 }
 
 # Lookup accepter's VPC so that we can reference the CIDR
 data "aws_vpc" "accepter" {
   count    = local.accepter_count
-  # provider = aws.accepter
+  provider = aws.accepter
   id       = var.accepter_vpc_id
-  # tags     = var.accepter_vpc_tags
+  tags     = var.accepter_vpc_tags
 }
 
 # Lookup accepter subnets
 data "aws_subnets" "accepter" {
   count    = local.accepter_count
-  # provider = aws.accepter
+  provider = aws.accepter
   filter {
     name   = "vpc-id"
     values = [local.accepter_vpc_id]
@@ -67,7 +67,7 @@ locals {
 
 data "aws_route_tables" "accepter" {
   for_each = toset(local.accepter_subnet_ids)
-  # provider = aws.accepter
+  provider = aws.accepter
   vpc_id   = local.accepter_vpc_id
   filter {
     name   = "association.subnet-id"
@@ -78,7 +78,7 @@ data "aws_route_tables" "accepter" {
 # If we had more subnets than routetables, we should update the default.
 data "aws_route_tables" "default_rts" {
   count    = local.count
-  # provider = aws.accepter
+  provider = aws.accepter
   vpc_id   = local.accepter_vpc_id
   filter {
     name   = "association.main"
@@ -98,7 +98,7 @@ locals {
 # Create routes from accepter to requester
 resource "aws_route" "accepter" {
   count                     = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
-  # provider                  = aws.accepter
+  provider                  = aws.accepter
   route_table_id            = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
   destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
@@ -117,7 +117,7 @@ resource "aws_route" "accepter" {
 # Accepter's side of the connection.
 resource "aws_vpc_peering_connection_accepter" "accepter" {
   count                     = local.accepter_count
-  # provider                  = aws.accepter
+  provider                  = aws.accepter
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   auto_accept               = var.auto_accept
   tags                      = module.accepter.tags
@@ -125,7 +125,7 @@ resource "aws_vpc_peering_connection_accepter" "accepter" {
 
 resource "aws_vpc_peering_connection_options" "accepter" {
   count                     = local.accepter_count
-  # provider                  = aws.accepter
+  provider                  = aws.accepter
   vpc_peering_connection_id = local.active_vpc_peering_connection_id
 
   accepter {
