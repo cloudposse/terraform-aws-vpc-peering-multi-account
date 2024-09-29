@@ -122,8 +122,8 @@ data "aws_subnet" "requester" {
 
 locals {
   requester_subnet_ids       = try(distinct(sort(flatten(data.aws_subnets.requester[*].ids))), [])
-  requester_cidr_blocks      = [for s in data.aws_subnet.requester : s.cidr_block]
-  requester_ipv6_cidr_blocks = [for s in data.aws_subnet.requester : s.ipv6_cidr_block]
+  requester_cidr_blocks      = compact([for s in data.aws_subnet.requester : s.cidr_block])
+  requester_ipv6_cidr_blocks = compact([for s in data.aws_subnet.requester : s.ipv6_cidr_block])
   requester_subnet_ids_count = length(local.requester_subnet_ids)
   requester_vpc_id           = join("", data.aws_vpc.requester[*].id)
 }
