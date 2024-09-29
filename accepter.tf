@@ -65,12 +65,16 @@ data "aws_subnet" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids       = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
-  accepter_cidr_blocks      = compact([for s in data.aws_subnet.accepter : s.cidr_block])
-  accepter_ipv6_cidr_blocks = compact([for s in data.aws_subnet.accepter : s.ipv6_cidr_block])
-  accepter_vpc_id           = join("", data.aws_vpc.accepter[*].id)
-  accepter_account_id       = join("", data.aws_caller_identity.accepter[*].account_id)
-  accepter_region           = join("", data.aws_region.accepter[*].name)
+  accepter_subnet_ids  = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
+  accepter_cidr_blocks = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.cidr_block]) : flatten(data.aws_vpc.accepter[*].cidr_block_associations)
+  accepter_ipv6_cidr_blocks = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.ipv6_cidr_block]) : flatten(length(data.aws_vpc.accepter[*].ipv6_cidr_block) > 0 ? [
+    for vpc_temp in data.aws_vpc.accepter : {
+      cidr_block = vpc_temp.ipv6_cidr_block
+    }
+  ] : [])
+  accepter_vpc_id     = join("", data.aws_vpc.accepter[*].id)
+  accepter_account_id = join("", data.aws_caller_identity.accepter[*].account_id)
+  accepter_region     = join("", data.aws_region.accepter[*].name)
 }
 
 data "aws_route_tables" "accepter" {
