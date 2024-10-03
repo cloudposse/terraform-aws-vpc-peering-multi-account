@@ -65,7 +65,7 @@ data "aws_subnet" "accepter" {
 }
 
 locals {
-  accepter_subnet_ids       = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
+  accepter_subnet_ids       = local.accepter_enabled ? try(data.aws_subnets.accepter[0].ids, []) : []
   accepter_cidr_blocks      = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.cidr_block]) : flatten(data.aws_vpc.accepter[*].cidr_block_associations[*].cidr_block)
   accepter_ipv6_cidr_blocks = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.ipv6_cidr_block]) : compact([for vpc_temp in data.aws_vpc.accepter : vpc_temp.ipv6_cidr_block])
   accepter_vpc_id           = join("", data.aws_vpc.accepter[*].id)
