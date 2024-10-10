@@ -58,11 +58,19 @@ data "aws_subnets" "accepter" {
   tags = var.accepter_subnet_tags
 }
 
+data "aws_subnet" "accepter" {
+  for_each = toset(flatten(data.aws_subnets.accepter[*].ids))
+  provider = aws.accepter
+  id       = each.value
+}
+
 locals {
-  accepter_subnet_ids = local.accepter_enabled ? data.aws_subnets.accepter[0].ids : []
-  accepter_vpc_id     = join("", data.aws_vpc.accepter[*].id)
-  accepter_account_id = join("", data.aws_caller_identity.accepter[*].account_id)
-  accepter_region     = join("", data.aws_region.accepter[*].name)
+  accepter_subnet_ids       = local.accepter_enabled ? try(data.aws_subnets.accepter[0].ids, []) : []
+  accepter_cidr_blocks      = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.cidr_block]) : flatten(data.aws_vpc.accepter[*].cidr_block_associations[*].cidr_block)
+  accepter_ipv6_cidr_blocks = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.ipv6_cidr_block]) : compact([for vpc_temp in data.aws_vpc.accepter : vpc_temp.ipv6_cidr_block])
+  accepter_vpc_id           = join("", data.aws_vpc.accepter[*].id)
+  accepter_account_id       = join("", data.aws_caller_identity.accepter[*].account_id)
+  accepter_region           = join("", data.aws_region.accepter[*].name)
 }
 
 data "aws_route_tables" "accepter" {
@@ -87,17 +95,13 @@ data "aws_route_tables" "default_rts" {
 }
 
 locals {
-  accepter_aws_default_rt_id             = join("", flatten(data.aws_route_tables.default_rts[*].ids))
-  accepter_aws_rt_map                    = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
-  accepter_aws_route_table_ids           = distinct(sort(values(local.accepter_aws_rt_map)))
-  accepter_aws_route_table_ids_count     = length(local.accepter_aws_route_table_ids)
-  accepter_cidr_block_associations       = flatten(data.aws_vpc.accepter[*].cidr_block_associations)
-  accepter_cidr_block_associations_count = length(local.accepter_cidr_block_associations)
-  accepter_ipv6_cidr_block_associations = flatten(length(data.aws_vpc.accepter[*].ipv6_cidr_block) > 0 ? [
-    for vpc_temp in data.aws_vpc.accepter : {
-      cidr_block = vpc_temp.ipv6_cidr_block
-    }
-  ] : [])
+  accepter_aws_default_rt_id                  = join("", flatten(data.aws_route_tables.default_rts[*].ids))
+  accepter_aws_rt_map                         = { for s in local.accepter_subnet_ids : s => try(data.aws_route_tables.accepter[s].ids[0], local.accepter_aws_default_rt_id) }
+  accepter_aws_route_table_ids                = distinct(sort(values(local.accepter_aws_rt_map)))
+  accepter_aws_route_table_ids_count          = length(local.accepter_aws_route_table_ids)
+  accepter_cidr_block_associations            = local.accepter_cidr_blocks
+  accepter_cidr_block_associations_count      = length(local.accepter_cidr_block_associations)
+  accepter_ipv6_cidr_block_associations       = local.accepter_ipv6_cidr_blocks
   accepter_ipv6_cidr_block_associations_count = length(local.accepter_ipv6_cidr_block_associations)
 }
 
@@ -106,7 +110,7 @@ resource "aws_route" "accepter" {
   count                     = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_cidr_block_associations_count : 0
   provider                  = aws.accepter
   route_table_id            = local.accepter_aws_route_table_ids[floor(count.index / local.requester_cidr_block_associations_count)]
-  destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]["cidr_block"]
+  destination_cidr_block    = local.requester_cidr_block_associations[count.index % local.requester_cidr_block_associations_count]
   vpc_peering_connection_id = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_tables.accepter,
@@ -125,7 +129,7 @@ resource "aws_route" "accepter_ipv6" {
   count                       = local.enabled ? local.accepter_aws_route_table_ids_count * local.requester_ipv6_cidr_block_associations_count : 0
   provider                    = aws.accepter
   route_table_id              = local.accepter_aws_route_table_ids[floor(count.index / local.requester_ipv6_cidr_block_associations_count)]
-  destination_ipv6_cidr_block = local.requester_ipv6_cidr_block_associations[count.index % local.requester_ipv6_cidr_block_associations_count]["cidr_block"]
+  destination_ipv6_cidr_block = local.requester_ipv6_cidr_block_associations[count.index % local.requester_ipv6_cidr_block_associations_count]
   vpc_peering_connection_id   = join("", aws_vpc_peering_connection.requester[*].id)
   depends_on = [
     data.aws_route_tables.accepter,
