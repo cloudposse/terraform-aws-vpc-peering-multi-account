@@ -34,7 +34,7 @@ func TestExamplesComplete(t *testing.T) {
 	// This will run `terraform init` and `terraform apply` to create VPCs and subnets, required for the test
 	terraform.InitAndApply(t, terraformVpcOnlyOptions)
 	requesterVpcId := terraform.Output(t, terraformVpcOnlyOptions, "requester_vpc_id")
-	acceptorVpcId := terraform.Output(t, terraformVpcOnlyOptions, "accepter_vpc_id")
+	accepterVpcId := terraform.Output(t, terraformVpcOnlyOptions, "accepter_vpc_id")
 
 	terraformOptions := &terraform.Options{
 		// The path to where our Terraform code is located
@@ -44,7 +44,7 @@ func TestExamplesComplete(t *testing.T) {
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 		Vars: map[string]interface{}{
 			"requester_vpc_id": requesterVpcId,
-			"accepter_vpc_id": acceptorVpcId,
+			"accepter_vpc_id": accepterVpcId,
 			"attributes": attributes,
 		},}
 
@@ -61,14 +61,14 @@ func TestExamplesComplete(t *testing.T) {
 	assert.Contains(t, requesterConnectionId, "pcx-")
 
 	// Run `terraform output` to get the value of an output variable
-	acceptorConnectionId := terraform.Output(t, terraformOptions, "accepter_connection_id")
+	accepterConnectionId := terraform.Output(t, terraformOptions, "accepter_connection_id")
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, acceptorConnectionId, "pcx-")
+	assert.Contains(t, accepterConnectionId, "pcx-")
 
 	// Run `terraform output` to get the value of an output variable
-	acceptorAcceptStatus := terraform.Output(t, terraformOptions, "accepter_accept_status")
+	accepterAcceptStatus := terraform.Output(t, terraformOptions, "accepter_accept_status")
 	// Verify we're getting back the outputs we expect
-	assert.Equal(t, "active", acceptorAcceptStatus)
+	assert.Equal(t, "active", accepterAcceptStatus)
 
 	// Run `terraform output` to get the value of an output variable
 	requesterAcceptStatus := terraform.Output(t, terraformOptions, "requester_accept_status")
