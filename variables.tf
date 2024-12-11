@@ -78,17 +78,17 @@ variable "skip_metadata_api_check" {
 variable "add_attribute_tag" {
   type        = bool
   default     = true
-  description = "If `true` will add additional attribute tag to the requester and accceptor resources"
+  description = "If `true` will add additional attribute tag to the requester and accepter resources"
 }
 
 variable "aws_route_create_timeout" {
   type        = string
   default     = "5m"
-  description = "Time to wait for AWS route creation specifed as a Go Duration, e.g. `2m`"
+  description = "Time to wait for AWS route creation specified as a Go Duration, e.g. `2m`"
 }
 
 variable "aws_route_delete_timeout" {
   type        = string
   default     = "5m"
-  description = "Time to wait for AWS route deletion specifed as a Go Duration, e.g. `5m`"
+  description = "Time to wait for AWS route deletion specified as a Go Duration, e.g. `5m`"
 }
