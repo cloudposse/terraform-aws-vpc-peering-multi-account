@@ -83,7 +83,7 @@ data "aws_route_tables" "accepter" {
   }
 }
 
-# If we had more subnets than routetables, we should update the default.
+# If we had more subnets than route tables, we should update the default.
 data "aws_route_tables" "default_rts" {
   count    = local.count
   provider = aws.accepter
