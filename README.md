@@ -3,7 +3,7 @@
 <!-- markdownlint-disable -->
 <a href="https://cpco.io/homepage"><img src="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/blob/main/.github/banner.png?raw=true" alt="Project Banner"/></a><br/>
     <p align="right">
-<a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/commits"><img src="https://img.shields.io/github/last-commit/cloudposse/terraform-aws-vpc-peering-multi-account.svg?style=for-the-badge" alt="Last Updated"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a></p>
+<a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-vpc-peering-multi-account.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/commits"><img src="https://img.shields.io/github/last-commit/cloudposse/terraform-aws-vpc-peering-multi-account.svg?style=for-the-badge" alt="Last Updated"/></a><a href="https://cloudposse.com/slack"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a></p>
 <!-- markdownlint-restore -->
 
 <!--
@@ -56,7 +56,6 @@ However, Terraform only allows the VPC Peering Connection to be deleted from the
 
 
 ## Usage
-
 
 **IMPORTANT:** Do not pin to `master` because there may be breaking changes between releases. Instead pin to the release tag (e.g. `?ref=tags/x.y.z`) of one of our [latest releases](https://github.com/cloudposse/terraform-aws-vpc-peering-multi-account/releases).
 
@@ -268,18 +267,6 @@ For more information on IAM policies and permissions for VPC peering, see [Creat
 
 
 <!-- markdownlint-disable -->
-## Makefile Targets
-```text
-Available targets:
-
-  help                                Help screen
-  help/all                            Display help for all targets
-  help/short                          This help short screen
-  lint                                Lint terraform code
-
-```
-<!-- markdownlint-restore -->
-<!-- markdownlint-disable -->
 ## Requirements
 
 | Name | Version |
@@ -387,6 +374,11 @@ Available targets:
 | <a name="output_requester_accept_status"></a> [requester\_accept\_status](#output\_requester\_accept\_status) | Requester VPC peering connection request status |
 | <a name="output_requester_connection_id"></a> [requester\_connection\_id](#output\_requester\_connection\_id) | Requester VPC peering connection ID |
 <!-- markdownlint-restore -->
+
+
+
+
+
 
 
 ## Related Projects
