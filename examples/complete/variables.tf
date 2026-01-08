@@ -6,6 +6,7 @@ variable "region" {
 variable "requester_aws_assume_role_arn" {
   type        = string
   description = "Requester AWS Assume Role ARN"
+  default     = null
 }
 
 variable "requester_region" {
