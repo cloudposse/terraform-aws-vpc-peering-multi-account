@@ -1,37 +1,3 @@
-variable "requester_aws_profile" {
-  description = "Profile used to assume requester_aws_assume_role_arn"
-  type        = string
-  default     = ""
-}
-
-variable "requester_aws_access_key" {
-  description = "Access key id to use in requester account"
-  type        = string
-  default     = null
-}
-
-variable "requester_aws_assume_role_arn" {
-  description = "Requester AWS Assume Role ARN"
-  type        = string
-}
-
-variable "requester_aws_secret_key" {
-  description = "Secret access key to use in requester account"
-  type        = string
-  default     = null
-}
-
-variable "requester_aws_token" {
-  description = "Session token for validating temporary credentials"
-  type        = string
-  default     = null
-}
-
-variable "requester_region" {
-  type        = string
-  description = "Requester AWS region"
-}
-
 variable "requester_subnet_tags" {
   type        = map(string)
   description = "Only add peer routes to requester VPC route tables of subnets matching these tags"
@@ -54,26 +20,6 @@ variable "requester_allow_remote_vpc_dns_resolution" {
   type        = bool
   default     = true
   description = "Allow requester VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the accepter VPC"
-}
-
-# Requestors's credentials
-provider "aws" {
-  alias                   = "requester"
-  region                  = var.requester_region
-  profile                 = var.requester_aws_profile
-  skip_metadata_api_check = var.skip_metadata_api_check
-
-  dynamic "assume_role" {
-    for_each = var.requester_aws_assume_role_arn != "" ? ["true"] : []
-    content {
-      role_arn = var.requester_aws_assume_role_arn
-    }
-  }
-
-  access_key = var.requester_aws_access_key
-  secret_key = var.requester_aws_secret_key
-  token      = var.requester_aws_token
-
 }
 
 module "requester" {
