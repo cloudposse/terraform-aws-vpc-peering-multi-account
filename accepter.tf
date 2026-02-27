@@ -1,22 +1,3 @@
-# Accepter's credentials
-provider "aws" {
-  alias                   = "accepter"
-  region                  = var.accepter_region
-  profile                 = var.accepter_aws_profile
-  skip_metadata_api_check = var.skip_metadata_api_check
-
-  dynamic "assume_role" {
-    for_each = var.accepter_aws_assume_role_arn != "" ? ["true"] : []
-    content {
-      role_arn = var.accepter_aws_assume_role_arn
-    }
-  }
-
-  access_key = var.accepter_aws_access_key
-  secret_key = var.accepter_aws_secret_key
-  token      = var.accepter_aws_token
-}
-
 module "accepter" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
