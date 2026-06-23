@@ -51,7 +51,7 @@ locals {
   accepter_ipv6_cidr_blocks = length(var.accepter_subnet_tags) > 0 ? compact([for s in data.aws_subnet.accepter : s.ipv6_cidr_block]) : compact([for vpc_temp in data.aws_vpc.accepter : vpc_temp.ipv6_cidr_block])
   accepter_vpc_id           = join("", data.aws_vpc.accepter[*].id)
   accepter_account_id       = join("", data.aws_caller_identity.accepter[*].account_id)
-  accepter_region           = join("", data.aws_region.accepter[*].name)
+  accepter_region           = join("", data.aws_region.accepter[*].region)
 }
 
 data "aws_route_tables" "accepter" {
